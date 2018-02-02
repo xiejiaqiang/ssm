@@ -40,14 +40,52 @@ INSERT INTO `attachment` VALUES ('3', '手动备份20171129142920.xls', 'logs/ba
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `logId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志',
-  `userName` varchar(30) DEFAULT NULL COMMENT '操作人',
-  `createTime` datetime DEFAULT NULL COMMENT '时间',
-  `content` text COMMENT '详细',
-  `operation` varchar(300) DEFAULT NULL COMMENT '操作类型（增删改）',
-  `ip` varchar(60) DEFAULT NULL COMMENT 'IP地址',
-  `module` varchar(40) DEFAULT NULL COMMENT '所属模块',
+  `userName` varchar(30) NOT NULL COMMENT '操作人',
+  `createTime` datetime NOT NULL COMMENT '时间',
+  `content` text NOT NULL COMMENT '详细',
+  `operation` varchar(10) NOT NULL COMMENT '操作类型（0:系统日志1:增加2：删除3：修改）',
+  `ip` varchar(60) NOT NULL COMMENT 'IP地址',
+  `module` varchar(40) NOT NULL COMMENT '所属模块',
   PRIMARY KEY (`logId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='操作日志记录';
+) ENGINE=InnoDB AUTO_INCREMENT=357 DEFAULT CHARSET=utf8 COMMENT='操作日志记录';
+
+-- ----------------------------
+-- Records of log
+-- ----------------------------
+INSERT INTO `log` VALUES ('323', 'admin', '2018-01-12 16:11:26', 'intercept the method: com.controller.LoginController.toMainnull', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('324', 'admin', '2018-01-12 16:11:34', 'intercept the method: com.controller.LoginController.toMainnull', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('325', 'admin', '2018-01-12 16:11:51', 'intercept the method: com.controller.LoginController.toMainnull', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('326', 'xie', '2017-12-26 11:08:40', '左侧导航栏树菜单的增加;|树子菜单排序不准确问题优化。', '版本变更', '1.1.0', '0');
+INSERT INTO `log` VALUES ('327', 'xie', '2017-12-30 11:10:01', '登录页面区分管理员登录和用户登录;|用户登录界面的增加;|表单验证改用H5验证;|用户管理、角色管理、日志管理页面布局优化，按钮样式更改为更醒目的颜色。', '版本变更', '1.2.0', '0');
+INSERT INTO `log` VALUES ('328', 'xie', '2018-01-01 11:13:04', '用户登录后右下方新增用户上次登录信息,点击可查询历史登录记录;|新增登录信息失效页面。', '版本变更', '1.3.0', '0');
+INSERT INTO `log` VALUES ('329', 'xie', '2018-01-17 11:17:13', '全新的用户修改密码界面;|增加用户修改密码时的提示框。', '版本变更', '1.4.0', '0');
+INSERT INTO `log` VALUES ('330', 'xie', '2018-01-18 11:18:27', '首页右侧页面新增更新日志及联系信息；|主页新增加通知和项目进度。', '版本变更', '1.5.0', '0');
+INSERT INTO `log` VALUES ('331', 'admin', '2018-01-18 16:20:35', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('332', 'admin', '2018-01-18 16:21:00', 'intercept the method: com.controller.LoginController.logout\r\n### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\r\n### The error may involve com.dao.LogMapper.insert-Inline\r\n### The error occurred while setting parameters\r\n### SQL: INSERT INTO log  ( logId,userName,createTime,operation,ip,module,content ) VALUES( ?,?,?,?,?,?,? )\r\n### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\n; SQL []; Column \'ip\' cannot be null; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('333', 'admin', '2018-01-18 16:21:47', 'intercept the method: com.controller.LoginController.logout\r\n### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\r\n### The error may involve com.dao.LogMapper.insert-Inline\r\n### The error occurred while setting parameters\r\n### SQL: INSERT INTO log  ( logId,userName,createTime,operation,ip,module,content ) VALUES( ?,?,?,?,?,?,? )\r\n### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\n; SQL []; Column \'ip\' cannot be null; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('334', 'admin', '2018-01-18 16:21:51', 'intercept the method: com.controller.LoginController.logout\r\n### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\r\n### The error may involve com.dao.LogMapper.insert-Inline\r\n### The error occurred while setting parameters\r\n### SQL: INSERT INTO log  ( logId,userName,createTime,operation,ip,module,content ) VALUES( ?,?,?,?,?,?,? )\r\n### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null\n; SQL []; Column \'ip\' cannot be null; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column \'ip\' cannot be null', '拦截到异常', '127.0.0.1', '/ssm');
+INSERT INTO `log` VALUES ('335', 'admin', '2018-01-18 16:23:21', '退出操作', '退出', '127.0.0.1', '5');
+INSERT INTO `log` VALUES ('336', 'admin', '2018-01-18 16:23:28', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('337', 'admin', '2018-01-18 16:42:17', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('338', 'admin', '2018-01-18 16:42:18', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('339', 'admin', '2018-01-18 17:35:41', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('340', 'admin', '2018-01-18 17:38:13', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('341', 'xie', '2017-11-23 17:46:54', '初版完成', '版本变更', '1.0.0', '0');
+INSERT INTO `log` VALUES ('342', 'admin', '2018-01-18 18:00:58', '管理员登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('343', 'admin', '2018-01-18 18:28:40', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('344', 'admin', '2018-01-18 18:50:34', '退出操作', '退出', '127.0.0.1', '5');
+INSERT INTO `log` VALUES ('345', 'admin', '2018-01-18 18:50:41', '管理员登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('346', 'admin', '2018-01-18 18:51:45', '退出操作', '退出', '127.0.0.1', '5');
+INSERT INTO `log` VALUES ('347', 'admin', '2018-01-18 18:51:53', '管理员登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('348', 'admin', '2018-01-31 14:27:03', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('349', 'admin', '2018-01-31 17:24:32', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('350', 'admin', '2018-01-31 17:25:15', '退出操作', '退出', '127.0.0.1', '5');
+INSERT INTO `log` VALUES ('351', 'admin', '2018-01-31 17:25:22', '管理员登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('352', 'admin', '2018-01-31 17:26:09', '退出操作', '退出', '127.0.0.1', '5');
+INSERT INTO `log` VALUES ('353', 'admin', '2018-01-31 17:26:20', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('354', 'admin', '2018-02-02 11:31:50', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('355', 'admin', '2018-02-02 13:57:32', '普通用户登录操作', '登录', '127.0.0.1', '6');
+INSERT INTO `log` VALUES ('356', 'admin', '2018-02-02 13:58:22', '退出操作', '退出', '127.0.0.1', '5');
 
 -- ----------------------------
 -- Records of log
