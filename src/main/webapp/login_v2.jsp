@@ -26,10 +26,10 @@
     <div>
         <div>
 
-            <h1 class="logo-name">H+</h1>
+            <h1 class="logo-name">佳</h1>
 
         </div>
-        <h3>欢迎使用 H+</h3>
+        <h3>欢迎登录佳一后台管理系统</h3>
 
         <form    class="m-t"   id="yhdenglu"  method="post"  autocomplete="off" onsubmit="return doSave()"  >
             <div class="form-group">

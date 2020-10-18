@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemManage;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,7 +50,7 @@ public class RoleController {
 	public String index(HttpServletRequest request,Integer menuid){
 		List<Operation> operationList = operationService.findOperationIdsByMenuid(menuid);
 		request.setAttribute("operationList", operationList);
-		return "role";
+		return "systemManage/role";
 	}
 	
 	@RequestMapping("roleList")
@@ -160,7 +160,7 @@ public class RoleController {
 	@RequestMapping("rightCtrl")
 	public String chooseMenu(HttpServletRequest request,Integer roleid){
 		request.setAttribute("roleid",roleid);
-		return "rightCtrl";
+		return "systemManage/rightCtrl";
 	}
 	
 	@RequestMapping("chooseMenu")

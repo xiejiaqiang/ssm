@@ -62,3 +62,24 @@ function callToastr(title,msg,toastr,shortCutFunction){
         return $toastlast;
     }
 }
+function layerAlert(errorMsg,iconIndex){
+    parent.layer.alert(errorMsg , {
+        icon: iconIndex,
+        skin: 'layer-ext-moon' //该皮肤由layer.seaning.com友情扩展。关于皮肤的扩展规则，去这里查阅
+    })
+}
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};

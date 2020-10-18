@@ -166,6 +166,8 @@
 						leaf_field : "isLeaf",
 						expanded_field : "expanded"
 					},
+					sortable : true,
+					sortName : "seq",
 					sortorder : "asc",
 					editurl : 'reserveMenu.htm'
 				});

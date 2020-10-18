@@ -12,7 +12,7 @@
 	rel="stylesheet">
 <link href="${path }/resources/css/animate.css" rel="stylesheet">
 <link href="${path }/resources/css/style.css?v=4.1.0" rel="stylesheet">
-<script src="${path }/resources/js/view/user.js"></script>
+<script src="${path }/resources/js/view/systemManage/user.js"></script>
 </head>
 <body class="gray-bg">
 	<div class="panel-body">
@@ -99,45 +99,7 @@
 
 	</div>
 	
-	
-	<!--删除对话框 -->
-	<div class="modal fade" id="modal_user_del" role="dialog" aria-labelledby="modal_user_del" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					 <h4 class="modal-title" id="modal_user_del_head"> 刪除  </h4>
-				</div>
-				<div class="modal-body">
-							删除所选记录？
-				</div>
-				<div class="modal-footer">
-				<button type="button" class="btn btn-danger"  id="del_user_btn">刪除</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-			</div>
-			</div>
-		</div>
-	</div>
-	
-	
-	<div class="ui-jqdialog modal-content" id="alertmod_table_user_mod"
-		dir="ltr" role="dialog"
-		aria-labelledby="alerthd_table_user" aria-hidden="true"
-		style="width: 200px; height: auto; z-index: 2222; overflow: hidden;top: 274px; left: 534px; display: none;position: absolute;">
-		<div class="ui-jqdialog-titlebar modal-header" id="alerthd_table_user"
-			style="cursor: move;">
-			<span class="ui-jqdialog-title" style="float: left;">注意</span> <a id ="alertmod_table_user_mod_a"
-				class="ui-jqdialog-titlebar-close" style="right: 0.3em;"> <span
-				class="glyphicon glyphicon-remove-circle"></span></a>
-		</div>
-		<div class="ui-jqdialog-content modal-body" id="alertcnt_table_user">
-			<div id="select_message"></div>
-			<span tabindex="0"> <span tabindex="-1" id="jqg_alrt"></span></span>
-		</div>
-		<div
-			class="jqResize ui-resizable-handle ui-resizable-se glyphicon glyphicon-import"></div>
-	</div>
-	
+
 	<!-- Peity-->
 	<script src="${path }/resources/js/plugins/peity/jquery.peity.min.js"></script>
 	

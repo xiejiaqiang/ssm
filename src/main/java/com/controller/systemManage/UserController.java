@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemManage;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class UserController extends LogController{
 		List<Operation> operationList = operationService.findOperationIdsByMenuid(menuid);
 		request.setAttribute("operationList", operationList);
 		request.setAttribute("roleList", roleList);
-		return "user";
+		return "systemManage/user";
 	}
 	
 	
@@ -100,7 +100,7 @@ public class UserController extends LogController{
 		try {
 			if (userId != null) {   // userId不为空 说明是修改
 				User userName = userService.existUserWithUserName(user.getUsername());
-				if(userName != null && userName.getUserid().compareTo(userId)==0){
+				if(userName == null || userName.getUserid().compareTo(userId)==0){
 					user.setUserid(userId);
 					userService.updateUser(user);
 					result.put("success", true);

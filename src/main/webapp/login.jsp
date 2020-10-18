@@ -44,10 +44,10 @@
         <div class="col-sm-7">
             <div class="signin-info">
                 <div class="logopanel m-b">
-                    <h1>[ -SSM- ]</h1>
+                    <h1>上海佳一</h1>
                 </div>
                 <div class="m-b"></div>
-                <h4>欢迎使用 <strong>SSM</strong></h4>
+                <h4>公司简介 <strong>:</strong></h4>
                 <ul class="m-b">
                     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
                     <p>
@@ -67,7 +67,7 @@
         <div class="col-sm-5">
             <form id="form1" name="form1" method="post"  autocomplete="off" onsubmit="return doSave2()" >
                 <h4 class="no-margins">登录：</h4>
-                <p class="m-t-md">登录到私人订制ssm框架</p>
+                <p class="m-t-md">上海佳一后台管理系统</p>
                 <input type="text" class="form-control uname" placeholder="用户名" name="username" id="username"   placeholder="请输入用户名" required="required" value="${userName }"/>
                 <input type="password" class="form-control pword m-b" placeholder="密码" id="password" name="password" placeholder="请输入密码"  required="required" value="${password }"/>
                      <!--  onkeydown="if(event.keyCode==13)form1.submit()" -->
@@ -87,7 +87,7 @@
     </div>
     <div class="signup-footer">
         <div class="pull-left">
-            &copy; 2017 All Rights Reserved. H+
+            &copy; 2020 All Rights Reserved. H+
         </div>
     </div>
 </div>

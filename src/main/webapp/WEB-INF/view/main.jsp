@@ -26,7 +26,7 @@
 <script src="${path }/resources/js/plugins/sweetalert/sweetalert.min.js"></script>
 <!-- 自定义js -->
 <script src="${path }/resources/js/content.js?v=1.0.0"></script>
-<script src="${path }/resources/js/view/main.js"></script>
+<script src="${path }/resources/js/view/systemManage/main.js"></script>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg"
 	style="overflow: hidden">
@@ -55,11 +55,11 @@
 								<li><a class="J_menuItem" href="profile.html">个人资料</a></li>
 								<li><a class="J_menuItem" href="contacts.html">联系我们</a></li>
 								<li><a class="J_menuItem" href="mailbox.html">信箱</a></li>
-								<li class="divider"></li>
+								<li class="divihder"></li>
 								<li><a href="logout.htm">安全退出</a></li>
 							</ul>
 						</div>
-						<div class="logo-element">H+</div>
+						<div class="logo-element">佳一</div>
 					</li>
 					<c:forEach items="${menuTree.children }" var="menu">
 						<li><a href="${menu.attributes.menuUrl }?menuid=${menu.id}">
@@ -135,8 +135,8 @@
 				</button>
 				<nav class="page-tabs J_menuTabs">
 					<div class="page-tabs-content">
-						<a href="javascript:tipsTest();" class="active J_menuTab"
-							data-id="index_v1.html">首页</a>
+						<a href="javascript:tipsTest();" class="J_menuTab active"
+							data-id="index.htm?v=4.0">首页</a>
 					</div>
 				</nav>
 				<button class="roll-nav roll-right J_tabRight">
@@ -154,13 +154,13 @@
 						<li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
 					</ul>
 				</div>
-				<a href="login.html" class="roll-nav roll-right J_tabExit"><i
+				<a href="logout.htm?menuid=4" class="roll-nav roll-right J_tabExit"><i
 					class="fa fa fa-sign-out"></i> 退出</a>
 			</div>
 			<div class="row J_mainContent" id="content-main">
 				<!-- -->
 				<iframe class="J_iframe" name="iframe0" width="100%" height="100%"
-					src="index.htm?v=4.0" frameborder="0" data-id="index.html"
+					src="index.htm?v=4.0" frameborder="0" data-id="index.htm?v=4.0"
 					seamless></iframe>
 			</div>
 			<div class="footer">
@@ -371,7 +371,7 @@
 
 		<!--右侧边栏结束-->
 		<div id="editPasswordDiv" class="ibox-content hide" >
-			<form class="form-horizontal "  method="post"  autocomplete="off" onsubmit="return doSave()">
+			<form class="form-horizontal " id = "editPasswordForm" method="post"  autocomplete="off" onsubmit="return doSave()">
 				<div class="form-group" id="oldpassdev" >
 					<label class="col-sm-3 control-label">旧密码：</label>
 

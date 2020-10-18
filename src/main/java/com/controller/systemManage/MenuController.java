@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemManage;
 
 
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class MenuController {
 			}
 		}
 		request.setAttribute("operationInfo", map);
-		return "menu";
+		return "systemManage/menu";
 	}
 	
 	@RequestMapping("treeGridMenu")

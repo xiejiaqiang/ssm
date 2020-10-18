@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemManage;
 
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class LogController{
 	public String index(HttpServletRequest request,Integer menuid) throws Exception{
 		List<Operation> operationList = operationService.findOperationIdsByMenuid(menuid);
 		request.setAttribute("operationList", operationList);
-		return "log";
+		return "systemManage/log";
 	}
 	
 	

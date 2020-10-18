@@ -107,11 +107,8 @@ function doSave() {
     var oldpassword = $.trim($("#oldpassword").val());
     var newpassword = $.trim($("#newpassword").val());
     var newpassword2 = $.trim($("#newpassword2").val());
-    var params = {
-        "oldpassword": oldpassword,
-        "newpassword": newpassword,
-        "newpassword2": newpassword2
-    };
+    var params = $('#editPasswordForm').serializeObject();
+
     if (newpassword == newpassword2) {
         parent.layer.close(index)
         swal({
@@ -182,9 +179,9 @@ function doSave() {
 
 }
 function editPassword () {
+    $("#editPasswordDiv").removeClass("hide");
     //-- shift:0平滑放大(默认)、shift:1从上掉落、shift:2从最底部往上滑、shift:3从左滑入、
     // shift:4从左翻滚、shift:5渐显、shift:6抖动 3.0之后版本用anim
-
     index = layer.open({
         type: 1,
         shift:3,

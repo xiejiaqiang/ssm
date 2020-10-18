@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/font-awesome.css?v=4.4.0" />
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/animate.css" />
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/style.css?v=4.1.0">
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/sweetalert/sweetalert.css">
 <!--[if lt IE 9]>
 <meta http-equiv="refresh" content="0;ie.html" />
 <![endif]-->
@@ -30,3 +31,6 @@
 <script  type="text/javascript" src="${path }/resources/js/common.js"></script>
 <!-- 自定义js-->
 <script src="${path }/resources/js/content.js?v=1.0.0"></script>
+<!-- sweetalert弹框-->
+<script src="${path }/resources/js/plugins/sweetalert/sweetalert.min.js"></script>
+

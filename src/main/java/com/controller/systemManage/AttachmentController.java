@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemManage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class AttachmentController {
 	
 	@RequestMapping("attachmentIndex")
 	public String index(HttpServletRequest request,HttpServletResponse response){
-		return "attachment";
+		return "systemManage/attachment";
 	}
 	
 	@RequestMapping("attachmentList")
