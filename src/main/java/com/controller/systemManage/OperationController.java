@@ -4,9 +4,9 @@ package com.controller.systemManage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.entity.po.Menu;
-import com.entity.po.Operation;
-import com.service.impl.OperationServiceImpl;
+import com.entity.po.systemManage.Menu;
+import com.entity.po.systemManage.Operation;
+import com.service.impl.systemManage.OperationServiceImpl;
 import com.util.StringUtil;
 import com.util.WriterUtil;
 import org.slf4j.Logger;
@@ -33,10 +33,10 @@ public class OperationController {
 		if(StringUtil.isNotEmpty(menuid)){
 			Menu menu = operationService.getMenuByMenuid(Integer.parseInt(menuid));
 			request.setAttribute("menuid",menuid);
-			request.setAttribute("menuname",menu.getMenuname());
+			request.setAttribute("menuname", menu.getMenuname());
 		}
 		
-		return "operation";
+		return "systemManage/operation";
 	}
 	
 	@RequestMapping("operationList")
@@ -58,7 +58,7 @@ public class OperationController {
 	}
 	
 	@RequestMapping("reserveOperation")
-	public void reserveMenu(HttpServletRequest request,HttpServletResponse response,Operation operation){
+	public void reserveMenu(HttpServletRequest request, HttpServletResponse response, Operation operation){
 		Integer operationid = operation.getOperationid();
 		JSONObject result=new JSONObject();
 		try {

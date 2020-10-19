@@ -7,10 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
 
-<link href="${path }/resources/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-<link href="${path }/resources/css/animate.css" rel="stylesheet">
-<link href="${path }/resources/css/style.css?v=4.1.0" rel="stylesheet">
-
 </head>
 <body class="gray-bg">
 	<div class="panel-body">
@@ -98,21 +94,7 @@
 	
 	<table id="backupLog"></table>
 	
-	<!-- Peity-->
-	<script src="${path }/resources/js/plugins/peity/jquery.peity.min.js"></script>
-	
-	<!-- Bootstrap table-->
-	<script src="${path }/resources/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-	<script src="${path }/resources/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 
-	<!-- layer javascript -->
-    <script src="${path }/resources/js/plugins/layer/layer.min.js"></script>
-    
-	<!-- 自定义js-->
-	<script src="${path }/resources/js/content.js?v=1.0.0"></script>
-	
-	<!-- layerDate plugin javascript -->
-	<script src="${path }/resources/js/plugins/layer/laydate/laydate.js"></script>
 	
 	<script type="text/javascript">
 	

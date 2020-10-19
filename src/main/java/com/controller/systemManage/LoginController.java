@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.constant.MmsConstats;
 import com.constant.ModuleTypeCode;
-import com.entity.po.Menu;
-import com.entity.po.Role;
+import com.entity.po.systemManage.Log;
+import com.entity.po.systemManage.Menu;
+import com.entity.po.systemManage.Role;
 import com.entity.po.Token;
+import com.entity.po.systemManage.User;
 import com.entity.vo.PageVO;
 import com.entity.vo.UpdateLogVO;
 import com.util.*;
@@ -19,13 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.entity.po.Log;
-import com.entity.po.User;
-import com.service.impl.LogServiceImpl;
-import com.service.impl.MenuServiceImpl;
-import com.service.impl.RoleServiceImpl;
+import com.service.impl.systemManage.LogServiceImpl;
+import com.service.impl.systemManage.MenuServiceImpl;
+import com.service.impl.systemManage.RoleServiceImpl;
 import com.service.impl.TokenServiceImpl;
-import com.service.impl.UserServiceImpl;
+import com.service.impl.systemManage.UserServiceImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -87,7 +87,7 @@ public class LoginController {
 			user.setUsername(userName);
 			user.setPassword(password);
 			User currentUser = userService.loginUser(user);
-			if(currentUser==null){
+			if(currentUser ==null){
 				LOGGER.info("数据库查询成功！用户名或密码验证失败={}","用户名或密码错误.");
 				pageVO.getMap().put(MmsConstats.MESSAGE, "用户名或密码错误.");
 				return pageVO;
@@ -143,15 +143,15 @@ public class LoginController {
 	//用户登录界面
 	@RequestMapping(value = "userLogin")
 	@ResponseBody
-	public PageVO userLogin(User user, HttpServletResponse response, HttpServletRequest request,HttpSession session) {
+	public PageVO userLogin(User user, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
 		LOGGER.info(
-				">>>>>>>>>>>>>>>>>>>>>进入用户名密码验证界面,username={}，password={}",user.getUsername(),user.getPassword());
+				">>>>>>>>>>>>>>>>>>>>>进入用户名密码验证界面,username={}，password={}", user.getUsername(), user.getPassword());
 
 		PageVO pageVO = new PageVO();
 		response.setContentType("text/xml;charset=utf-8");
 		try {
 			User currentUser = userService.loginUser(user);
-			if(currentUser==null){
+			if(currentUser ==null){
 				pageVO.getMap().put(MmsConstats.MESSAGE, "用户名或密码错误.");
 				pageVO.getMap().put(MmsConstats.DATA, false);
 			}else{
@@ -176,7 +176,7 @@ public class LoginController {
 				session.setAttribute("loginFlag",true);
 				pageVO.getMap().put(MmsConstats.DATA, true);
 			}
-			LOGGER.info(">>>>>>>>>>>>>>>>>>>>账号密码验证正常,验证结果为：{}",currentUser==null?false:true);
+			LOGGER.info(">>>>>>>>>>>>>>>>>>>>账号密码验证正常,验证结果为：{}", currentUser ==null?false:true);
 		} catch (Exception e) {
 			pageVO.getMap().put(MmsConstats.MESSAGE, "系统异常请联系管理员.");
 			pageVO.getMap().put(MmsConstats.SUCCESS, false);
@@ -200,7 +200,7 @@ public class LoginController {
 		if(currentUser == null ){
 			return null;
 		}
-		getMenuTree("-1",currentUser,request,response);
+		getMenuTree("-1", currentUser,request,response);
 		return "main";
 	}
 	// session失效页面
@@ -218,12 +218,12 @@ public class LoginController {
 	public String toIndex(HttpServletRequest request,HttpServletResponse response){
 		Log log = new Log();
 		log.setModule(ModuleTypeCode.SYSTEM_UPDATE_LOG_CODE.getCode());
-		List<Log> logs = logService.sortQueryLog("createtime",MmsConstats.DESC,log);
-		LOGGER.info("系统更新记录信息查询成功,size={}",logs.size());
+		List<Log> logs = logService.sortQueryLog("createtime",MmsConstats.DESC, log);
+		LOGGER.info("系统更新记录信息查询成功,size={}", logs.size());
 		//copy系统更新记录信息到视图vo
 		List<UpdateLogVO> updateLogs = CopyUtils.copyList(logs,UpdateLogVO.class);
 		//遍历存放版本号，更新信息
-		for (int i=0,j=logs.size();i<j;i++){
+		for (int i = 0, j = logs.size(); i<j; i++){
 			updateLogs.get(i).setVersionsNo(logs.get(i).getIp());
 			updateLogs.get(i).setId(logs.get(i).getLogid());
 			updateLogs.get(i).setCreatetime( DateFormatUtils.format(logs.get(i).getCreatetime(),"yyyy.MM.dd"));
@@ -243,7 +243,7 @@ public class LoginController {
 	}
 
 	// 加载最上级左菜单树
-	public void getMenuTree(String parentId,User currentUser,HttpServletRequest request,HttpServletResponse response) throws Exception{
+	public void getMenuTree(String parentId, User currentUser, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		try {
 
 			Role role = roleService.findOneRole(currentUser.getRoleid());

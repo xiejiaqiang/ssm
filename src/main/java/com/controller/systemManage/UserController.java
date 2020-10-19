@@ -8,8 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import com.config.util.ConfigUtil;
 import com.constant.MmsConstats;
-import com.entity.po.Operation;
-import com.entity.po.Role;
+import com.entity.po.systemManage.Operation;
+import com.entity.po.systemManage.Role;
+import com.entity.po.systemManage.User;
 import com.entity.vo.PageVO;
 import com.util.StringUtil;
 import com.util.WriterUtil;
@@ -20,10 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.entity.po.User;
-import com.service.impl.OperationServiceImpl;
-import com.service.impl.RoleServiceImpl;
-import com.service.impl.UserServiceImpl;
+import com.service.impl.systemManage.OperationServiceImpl;
+import com.service.impl.systemManage.RoleServiceImpl;
+import com.service.impl.systemManage.UserServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -94,7 +94,7 @@ public class UserController extends LogController{
 	
 	// 新增或修改
 	@RequestMapping("reserveUser")
-	public void reserveUser(HttpServletRequest request,User user,HttpServletResponse response){
+	public void reserveUser(HttpServletRequest request, User user, HttpServletResponse response){
 		Integer userId = user.getUserid();
 		JSONObject result=new JSONObject();
 		try {

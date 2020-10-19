@@ -64,7 +64,7 @@
 					<c:forEach items="${menuTree.children }" var="menu">
 						<li><a href="${menu.attributes.menuUrl }?menuid=${menu.id}">
 						 <i class="${menu.iconCls }"></i> <span class="nav-label">${menu.text }</span>
-								<c:if test="${menu.state eq 'isParent'}"><span class="fa arrow"></span></c:if> 
+								<c:if test="${menu.state eq 'isParent'}"><span class="fa arrow"></span></c:if>
 							</a> 
 							<c:if test="${fn:length(menu.children) gt 0 }">
 								<ul class="nav nav-second-level">

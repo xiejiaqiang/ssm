@@ -19,7 +19,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	<!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
 
 	<!-- 自动扫描(自动注入) -->
-	<context:component-scan base-package="com.service..*" />
+	<context:component-scan base-package="com.service.*,com.service.*.*" />
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 
 	<!--=================== 数据源，事务控制，xxx ================ -->

@@ -10,9 +10,6 @@
 <!-- jqgrid-->
 <link href="${path }/resources/css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
 
-<link href="${path }/resources/css/animate.css" rel="stylesheet">
-<link href="${path }/resources/css/style.css?v=4.1.0" rel="stylesheet">
-
 </head>
 <body class="gray-bg">
 	<input type="hidden" id="hide_roleid" name = "roleid" value="${roleid }"/>
@@ -34,18 +31,10 @@
 	</div>
 
 
-	<!-- Peity -->
-	<script src="${path }/resources/js/plugins/peity/jquery.peity.min.js"></script>
-
 	<!-- jqGrid -->
 	<script src="${path }/resources/js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
 	<script src="${path }/resources/js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
-	
-	<!-- 自定义js -->
-	<script src="${path }/resources/js/content.js?v=1.0.0"></script>
-	
-	<!-- layer javascript -->
-    <script src="${path }/resources/js/plugins/layer/layer.min.js"></script>
+
     
     <script type="text/javascript">
     $(function () {

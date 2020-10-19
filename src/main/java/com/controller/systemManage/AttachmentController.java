@@ -4,14 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.config.util.ConfigUtil;
-import com.entity.po.Attachment;
+import com.entity.po.systemManage.Attachment;
 import com.util.StringUtil;
 import com.util.WriterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.service.impl.AttachmentServiceImpl;
+import com.service.impl.systemManage.AttachmentServiceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;

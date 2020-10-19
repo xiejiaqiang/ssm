@@ -8,10 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.entity.po.Menu;
-import com.entity.po.Operation;
-import com.service.impl.MenuServiceImpl;
-import com.service.impl.OperationServiceImpl;
+import com.entity.po.systemManage.Menu;
+import com.entity.po.systemManage.Operation;
+import com.service.impl.systemManage.MenuServiceImpl;
+import com.service.impl.systemManage.OperationServiceImpl;
 import com.util.StringUtil;
 import com.util.WriterUtil;
 import org.slf4j.Logger;
@@ -125,22 +125,22 @@ public class MenuController {
 	
 	
 	@RequestMapping({"reserveMenu"})
-	public void reserveMenu(HttpServletRequest request,HttpServletResponse response,Menu menu){
-		String menuId = menu.getMenuid()==null?"":menu.getMenuid().toString();
+	public void reserveMenu(HttpServletRequest request, HttpServletResponse response, Menu menu){
+		String menuId = menu.getMenuid()==null?"": menu.getMenuid().toString();
 		JSONObject result = new JSONObject();
 		try {
 			if (StringUtil.isNotEmpty(menuId)) {  //更新操作
 				menu.setMenuid(Integer.parseInt(menuId));
 				menuService.updateMenu(menu);
 			} else {
-				String parentId = menu.getParentid()==null?"":menu.getParentid().toString();
+				String parentId = menu.getParentid()==null?"": menu.getParentid().toString();
 				menu.setParentid(Integer.parseInt(parentId));
 				if (isLeaf(parentId)) {
 					// 添加操作
 					if("1".equals(parentId)){
 						menu.setState("close");
 					}
-					menuService.addMenu(menu);  
+					menuService.addMenu(menu);
 					
 					// 更新他上级状态。变成isParent
 					menu = new Menu();

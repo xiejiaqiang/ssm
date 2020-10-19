@@ -7,11 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
 
-<link
-	href="${path }/resources/css/plugins/bootstrap-table/bootstrap-table.min.css"
-	rel="stylesheet">
-<link href="${path }/resources/css/animate.css" rel="stylesheet">
-<link href="${path }/resources/css/style.css?v=4.1.0" rel="stylesheet">
 <script src="${path }/resources/js/view/systemManage/user.js"></script>
 </head>
 <body class="gray-bg">
@@ -98,24 +93,7 @@
 		</div>
 
 	</div>
-	
 
-	<!-- Peity-->
-	<script src="${path }/resources/js/plugins/peity/jquery.peity.min.js"></script>
-	
-	<!-- Bootstrap table-->
-	<script src="${path }/resources/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-	<script src="${path }/resources/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-
-	<!-- 自定义js-->
-	<script src="${path }/resources/js/content.js?v=1.0.0"></script>
-	
-	 <!-- jQuery Validation plugin javascript-->
-    <script src="${path }/resources/js/plugins/validate/jquery.validate.min.js"></script>
-    <script src="${path }/resources/js/plugins/validate/messages_zh.min.js"></script>
-   
-   	<!-- jQuery form  -->
-    <script src="${path }/resources/js/jquery.form.min.js"></script>
 
 
 </body>

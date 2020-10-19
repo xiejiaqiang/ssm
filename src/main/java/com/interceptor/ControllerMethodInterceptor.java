@@ -6,7 +6,9 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.service.impl.LogServiceImpl;
+import com.entity.po.systemManage.Log;
+import com.entity.po.systemManage.User;
+import com.service.impl.systemManage.LogServiceImpl;
 import com.util.DateUtil;
 import com.util.IpUtil;
 import com.util.WriterUtil;
@@ -19,8 +21,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSONObject;
-import com.entity.po.Log;
-import com.entity.po.User;
 
 public class ControllerMethodInterceptor implements MethodInterceptor {
 	
@@ -52,10 +52,10 @@ public class ControllerMethodInterceptor implements MethodInterceptor {
 				if(currentUser == null ){
 					return proceed;
 				}
-				log.setUsername(currentUser.getUsername()); 
+				log.setUsername(currentUser.getUsername());
 				log.setModule(request.getContextPath());
 			}
-			log.setContent(info.append(e.getMessage()).toString());//操作内容  
+			log.setContent(info.append(e.getMessage()).toString());//操作内容
 			//利用反射调用invoke得到方法返回结果
 //			try {
 //				Object res = method.invoke(clazz.newInstance(),invocation.getArguments());
@@ -64,7 +64,7 @@ public class ControllerMethodInterceptor implements MethodInterceptor {
 //				logger.debug("ControllerMethodInterceptor中调用反射异常");
 //			}
 			
-	        log.setCreatetime(new Date());//操作时间  
+	        log.setCreatetime(new Date());//操作时间
 	        log.setOperation("拦截到异常");//操作
 	        log.setIp(IpUtil.getIpAddr(request));
 			logService.insertLog(log);

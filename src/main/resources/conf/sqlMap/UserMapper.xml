@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dao.UserMapper">
+<mapper namespace="com.dao.systemManage.UserMapper">
   
   
-  <resultMap id="BaseResultMap" type="com.entity.po.User">
+  <resultMap id="BaseResultMap" type="com.entity.po.systemManage.User">
     <!--
       WARNING - @mbg.generated
     -->
@@ -52,13 +52,13 @@
   </sql>
   
   
-  <select id="selectUserAndRoleByExample" parameterType="com.entity.po.Example.UserExample" resultMap="UserResultMap">
+  <select id="selectUserAndRoleByExample" parameterType="com.entity.po.Example.systemManage.UserExample" resultMap="UserResultMap">
     select
     <if test="distinct">
       distinct
     </if>
 	<include refid="User_Column_List" />
-	 from user u,role r 
+	 from user u,role r
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -76,14 +76,14 @@
     u.userId, u.userName, u.password, u.userType, u.roleId, u.userDescription, r.rolename
   </sql>
   
-   <resultMap id="UserResultMap" type="com.entity.po.User">
+   <resultMap id="UserResultMap" type="com.entity.po.systemManage.User">
     <id column="userId" jdbcType="INTEGER" property="userid" />
     <result column="userName" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="userType" jdbcType="TINYINT" property="usertype" />
     <result column="roleId" jdbcType="INTEGER" property="roleid" />
     <result column="userDescription" jdbcType="VARCHAR" property="userdescription" />
-    <association javaType="com.entity.po.Role" property="role">
+    <association javaType="com.entity.po.systemManage.Role" property="role">
 		<id column="roleId" property="roleid" />
 		<result column="roleName" property="rolename" />
 	</association>

@@ -6,8 +6,9 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
-import com.entity.po.Attachment;
-import com.service.impl.LogServiceImpl;
+import com.entity.po.systemManage.Attachment;
+import com.entity.po.systemManage.Log;
+import com.service.impl.systemManage.LogServiceImpl;
 import com.util.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -16,8 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.entity.po.Log;
-import com.service.impl.AttachmentServiceImpl;
+import com.service.impl.systemManage.AttachmentServiceImpl;
 
 
 public class JobUtil {

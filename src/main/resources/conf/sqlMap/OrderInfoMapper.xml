@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.order.OrderInfoMapper">
+  
+  
+  <resultMap id="BaseResultMap" type="com.entity.po.payOrder.TOrderInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+    <result column="mdseNo" jdbcType="VARCHAR" property="mdseNo" />
+    <result column="custName" jdbcType="VARCHAR" property="custName" />
+    <result column="numberNo" jdbcType="CHAR" property="numberNo" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="orderAmount" jdbcType="DECIMAL" property="orderAmount" />
+    <result column="actPayAmount" jdbcType="DECIMAL" property="actPayAmount" />
+    <result column="discountType" jdbcType="CHAR" property="discountType" />
+    <result column="orderStatus" jdbcType="CHAR" property="orderStatus" />
+    <result column="logisticsNo" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="invoiceFlg" jdbcType="CHAR" property="invoiceFlg" />
+    <result column="invoiceType" jdbcType="VARCHAR" property="invoiceType" />
+    <result column="orderDate" jdbcType="DATE" property="orderDate" />
+    <result column="orderChannel" jdbcType="CHAR" property="orderChannel" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="mdseName" jdbcType="VARCHAR" property="mdseName" />
+  </resultMap>
+
+
+
+  <select id="selectOrderInfoAndMdseInfo" parameterType="com.entity.po.Example.payOrder.TOrderInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Order_Mdse_Column_List" />
+    from t_order_info o,t_mdse_info m
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="_parameter == null">
+      where 1 = 1
+    </if>
+    and o.mdseNo = M.mdseNo
+    <if test="orderByClause != null">
+      order by o.${orderByClause}
+    </if>
+  </select>
+
+  <sql id="Order_Mdse_Column_List">
+    o.id, o.orderNo, o.mdseNo, o.custName, o.numberNo, o.address, o.orderAmount, o.actPayAmount, o.discountType,
+    o.orderStatus, o.logisticsNo, o.invoiceFlg, o.invoiceType, o.orderDate, o.orderChannel, o.remarks, m.mdseName
+  </sql>
+
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      1 = 1
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="and (" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and o.${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and o.${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and o.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and o.${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+</mapper>

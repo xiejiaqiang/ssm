@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.config.util.ConfigUtil;
-import com.entity.po.Menu;
-import com.entity.po.Operation;
-import com.entity.po.Role;
-import com.service.impl.MenuServiceImpl;
+import com.entity.po.systemManage.Menu;
+import com.entity.po.systemManage.Operation;
+import com.entity.po.systemManage.Role;
+import com.service.impl.systemManage.MenuServiceImpl;
 import com.util.StringUtil;
 import com.util.WriterUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.service.impl.OperationServiceImpl;
-import com.service.impl.RoleServiceImpl;
-import com.service.impl.UserServiceImpl;
+import com.service.impl.systemManage.OperationServiceImpl;
+import com.service.impl.systemManage.RoleServiceImpl;
+import com.service.impl.systemManage.UserServiceImpl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -101,7 +101,7 @@ public class RoleController {
 	
 	
 	@RequestMapping("reserveRole")
-	public void addUser(HttpServletRequest request,Role role,HttpServletResponse response){
+	public void addUser(HttpServletRequest request, Role role, HttpServletResponse response){
 		JSONObject result=new JSONObject();
 		try {
 			if (role.getRoleid() != null ) {
