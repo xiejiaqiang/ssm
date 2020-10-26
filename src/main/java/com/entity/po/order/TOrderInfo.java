@@ -1,4 +1,4 @@
-package com.entity.po.payOrder;
+package com.entity.po.order;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -98,6 +98,24 @@ public class TOrderInfo implements Serializable {
      */
     @Column(name = "orderDate")
     private Date orderDate;
+
+    /**
+     * 订单数量
+     */
+    @Column(name = "orderQuantity")
+    private Integer orderQuantity;
+
+    /**
+     * 进货价格
+     */
+    @Column(name = "purchasePrice")
+    private BigDecimal purchasePrice;
+
+    /**
+     * 进货来源
+     */
+    @Column(name = "purchaseSource")
+    private String purchaseSource;
 
     /**
      * 订单渠道
@@ -248,4 +266,29 @@ public class TOrderInfo implements Serializable {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+    public String getPurchaseSource() {
+        return purchaseSource;
+    }
+
+    public void setPurchaseSource(String purchaseSource) {
+        this.purchaseSource = purchaseSource;
+    }
+
+    public Integer getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(Integer orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
 }

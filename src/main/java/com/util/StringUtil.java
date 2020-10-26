@@ -61,7 +61,19 @@ public class StringUtil {
 	    }
 	    return ints;
 	}
-	
+	/**
+	 * String[]转long[]
+	 * @param arrs
+	 * @return
+	 */
+	public static Long[] stringArrToLongArr(String[] arrs){
+		Long[] longs = new Long[arrs.length];
+		for(int i=0;i<arrs.length;i++){
+			longs[i] = Long.parseLong(arrs[i]);
+		}
+		return longs;
+	}
+
 	/**
 	 * String[]转Set<Integer> 并去除重复元素
 	 * Integer[] 可有Set<Integer>.toArray()取得

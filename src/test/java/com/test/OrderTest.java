@@ -1,8 +1,8 @@
 package com.test;
 
-import com.entity.po.payOrder.TOrderInfo;
+import com.entity.po.order.TOrderInfo;
 import com.github.pagehelper.PageInfo;
-import com.service.payOrder.IOrderInfoService;
+import com.service.order.IOrderInfoService;
 import com.test.init.BaseTest;
 import com.test.init.TestMenuTree;
 import org.slf4j.Logger;

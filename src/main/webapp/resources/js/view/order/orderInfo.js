@@ -1,7 +1,9 @@
 $(function () {
     orderInfoListURL = 'orderInfoList.htm' ;//查询
-    deletePayOrderURL = 'deletePayOrder.htm' ;//删除
+    reserveOrderInfoURL = 'reserveOrderInfo.htm' ;//修改
+    deleteOrderInfoURL = 'deleteOrderInfo.htm' ;//删除
     batchImportURL = 'batchImport.htm' ;//批量导入
+    exportURL = 'export.htm' ;//导出
     init();
     $("#btn_search").bind("click",function(){
         //先销毁表格
@@ -10,7 +12,7 @@ $(function () {
     });
 
 
-    var validator = $("#form_user").validate({
+    var validator = $("#form_orderInfo").validate({
         submitHandler: function(form){
             $(form).ajaxSubmit({
                 dataType:"json",
@@ -19,7 +21,7 @@ $(function () {
                     if(data.success && !data.errorMsg ){
                         layerAlert("操作成功！",1)
                         validator.resetForm();
-                        $('#modal_user_edit').modal('hide');
+                        $('#modal_orderInfo_edit').modal('hide');
                         $("#btn_search").click();
                     }else{
                         layerAlert(data.errorMsg, 2)
@@ -28,8 +30,9 @@ $(function () {
             });
         }
     });
-    $("#submit_form_user_btn").click(function(){
-        $("#form_user").submit();
+    $("#submit_form_order_info_btn").click(function(){
+        $("#form_orderInfo").attr("action",reserveOrderInfoURL);
+        $("#form_orderInfo").submit();
     });
 });
 
@@ -199,6 +202,24 @@ var TableInit = function () {
                 {
                     field: 'orderDate',
                     title: '订单日期',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return changeDateFormat8(value);
+                    }
+                },
+                {
+                    field: 'orderQuantity',
+                    title: '订单数量',
+                    sortable:true
+                },
+                {
+                    field: 'purchasePrice',
+                    title: '进货价格',
+                    sortable:true
+                },
+                {
+                    field: 'purchaseSource',
+                    title: '进货来源',
                     sortable:true
                 },
                 {
@@ -206,13 +227,13 @@ var TableInit = function () {
                     title: '订单渠道',
                     sortable:true,
                     formatter:function(value,row,index){
-                        if(value == '0'){
+                        if(value == '1'){
                             return '天猫';
-                        }else if(value == '1'){
-                            return '京东';
                         }else if(value == '2'){
-                            return '淘宝';
+                            return '京东';
                         }else if(value == '3'){
+                            return '淘宝';
+                        }else if(value == '4'){
                             return '拼多多';
                         }
                         return value;
@@ -285,7 +306,7 @@ var FileInput = function () {
                 layerAlert(res.errorMsg, 2)
                 return;
             }else{
-                if(dataInfo == undefined){
+                if(dataInfo == undefined ||dataInfo[0] == undefined){
                     swal({
                         title: "导入成功",
                         text: "文件已全部导入成功",
@@ -341,19 +362,17 @@ var ButtonInit = function () {
     oInit.Init = function () {
         //初始化页面上面的按钮事件
         $("#btn_add").click(function(){
-            $('#password').attr("readOnly",false).val(getSelection.password);
-            $("#form_user").resetForm();
-            document.getElementById("hidden_txt_userid").value='';
-            $('#modal_user_edit').modal({backdrop: 'static', keyboard: false});
-            $('#modal_user_edit').modal('show');
+            $("#form_orderInfo").resetForm();
+            $('#modal_orderInfo_edit').modal({backdrop: 'static', keyboard: false});
+            $('#modal_orderInfo_edit').modal('show');
         });
 
         $("#btn_edit").click(function(){
-            var getSelections = $('#table_payOrder').bootstrapTable('getSelections');
+            var getSelections = $('#table_orderInfo').bootstrapTable('getSelections');
             if(getSelections && getSelections.length==1){
-                initEditUser(getSelections[0]);
-                $('#modal_user_edit').modal({backdrop: 'static', keyboard: false});
-                $('#modal_user_edit').modal('show');
+                initEditOrderInfo(getSelections[0]);
+                $('#modal_orderInfo_edit').modal({backdrop: 'static', keyboard: false});
+                $('#modal_orderInfo_edit').modal('show');
             }else{
                 parent.layer.msg('请选择一条数据');
             }
@@ -361,7 +380,7 @@ var ButtonInit = function () {
         });
 
         $("#btn_delete").click(function(){
-            var getSelections = $('#table_payOrder').bootstrapTable('getSelections');
+            var getSelections = $('#table_orderInfo').bootstrapTable('getSelections');
             if(getSelections && getSelections.length>0){
                     swal({
                             title: "您确定要删除这条信息吗",
@@ -386,6 +405,20 @@ var ButtonInit = function () {
             }
         });
 
+        $("#btn_export").click(function(){
+            var temp = {//这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                orderNo: $("#txt_orderNo").val(),
+                custName: $("#txt_custName").val(),
+                numberNo: $("#txt_numberNo").val(),
+                orderStatus: $("#txt_search_orderStatus").val(),
+                orderChannel: $("#txt_search_orderChannel").val(),
+                start: $("#txt_search_start").val(),
+                end: $("#txt_search_end").val(),
+            };
+            $("#searchFrom").attr("action",exportURL);
+            $("#searchFrom").submit();
+
+        });
         $("#btn_import").click(function(){
             var getSelections = $('#table_payOrder').bootstrapTable('getSelections');
             $('#modal_btn_import').modal({backdrop: 'static', keyboard: false});
@@ -398,30 +431,43 @@ var ButtonInit = function () {
 };
 
 
-function initEditUser(getSelection){
-    $('#hidden_txt_userid').val(getSelection.userid);
-    $('#roleid').val(getSelection.roleid);
-    $('#username').val(getSelection.username);
-    $('#userdescription').val(getSelection.userdescription);
-    $('#password').attr("readOnly",true).val(getSelection.password);
+function initEditOrderInfo(getSelection){
+    $('#id').val(getSelection.id);
+    $('#orderNo').val(getSelection.orderNo);
+    $('#mdseNo').val(getSelection.mdseNo);
+    $('#custName').val(getSelection.custName);
+    $('#numberNo').val(getSelection.numberNo);
+    $('#address').val(getSelection.address);
+    $('#orderAmount').val(getSelection.orderAmount);
+    $('#actPayAmount').val(getSelection.actPayAmount);
+    $('#discountType').val(getSelection.discountType);
+    $('#orderStatus').val(getSelection.orderStatus);
+    $('#logisticsNo').val(getSelection.logisticsNo);
+    $('#invoiceFlg').val(getSelection.invoiceFlg);
+    $('#invoiceType').val(getSelection.invoiceType);
+    $('#editOrderDate').val(changeDateFormat8(getSelection.orderDate));
+    $('#orderQuantity').val(getSelection.orderQuantity);
+    $('#purchasePrice').val(getSelection.purchasePrice);
+    $('#purchaseSource').val(getSelection.purchaseSource);
+    $('#orderChannel').val(getSelection.orderChannel);
+    $('#remarks').val(getSelection.remarks);
 }
 
 function delUser(){
-    var getSelections = $('#table_payOrder').bootstrapTable('getSelections');
+    var getSelections = $('#table_orderInfo').bootstrapTable('getSelections');
     var idArr = new Array();
     var ids;
     getSelections.forEach(function(item){
-        idArr.push(item.userid);
+        idArr.push(item.id);
     });
     ids = idArr.join(",");
     $.ajax({
-        url:"deleteUser.htm",
+        url:deleteOrderInfoURL,
         dataType:"json",
         data:{"ids":ids},
         type:"post",
         success:function(res){
             if(res.success){
-                $('#modal_user_del').modal('hide');
                 swal("删除成功！", "您已经永久删除了这些信息。", "success");
                 $("#btn_search").click();
             }else{

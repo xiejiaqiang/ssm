@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ssm系统</title>
+<title>上海佳一后台管理系统</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
@@ -165,8 +165,7 @@
 			</div>
 			<div class="footer">
 				<div class="pull-right">
-					&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's
-						blog</a>
+					&copy; 2020-2020 <a href="http://www.baidu.com/" target="_blank">ShangHaiJiaYi</a>
 				</div>
 			</div>
 		</div>

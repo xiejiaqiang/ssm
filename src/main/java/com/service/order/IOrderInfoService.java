@@ -1,10 +1,11 @@
-package com.service.payOrder;
+package com.service.order;
 
-import com.entity.po.payOrder.TOrderInfo;
+import com.entity.po.order.TOrderInfo;
 import com.entity.vo.BathInsertResultVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,9 +31,14 @@ public interface IOrderInfoService {
 	public Integer updateOrderInfo(TOrderInfo t) throws Exception;
 
 	// 删除
-	public Integer deleteOrderInfo(Integer id) throws Exception;
+	public Integer deleteOrderInfo(Long id) throws Exception;
 
 	public PageInfo<TOrderInfo> findOrderInfoPage(TOrderInfo t, int pageNum, int pageSize, String ordername, String order, String start, String end) throws Exception;
 
+	// 查询总条数
+	public Integer orderInfoCount() throws Exception;
+
+	// 查询总金额
+	public BigDecimal orderInfoCountAmount() throws Exception;
 
 }

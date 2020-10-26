@@ -87,7 +87,7 @@ public class JobUtil {
 			    row.createCell(0).setCellValue(i+1);
 			    row.createCell(1).setCellValue(log.getUsername());
 			    row.createCell(2).setCellValue(log.getIp());
-			    row.createCell(3).setCellValue(DateUtil.formatTime(log.getCreatetime(), "yyyy-mm-dd hh:mm:ss"));
+			    row.createCell(3).setCellValue(DateUtil.formatTime(log.getCreatetime(), "yyyy-MM-dd hh:mm:ss"));
 			    row.createCell(4).setCellValue(log.getOperation());
 			    row.createCell(5).setCellValue(log.getModule());
 			    row.createCell(6).setCellValue(log.getContent());

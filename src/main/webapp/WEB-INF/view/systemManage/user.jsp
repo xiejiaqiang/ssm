@@ -49,7 +49,7 @@
 	<div class="modal fade" id="modal_user_edit" role="dialog" aria-labelledby="modal_user_edit" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-body">
+				<div class="momodal_user_deldal-body">
 					<form id="form_user" method="post" action="reserveUser.htm">
 						<input type="hidden" name="userid" id="hidden_txt_userid" value=""/>
 						<table style="border-collapse:separate; border-spacing:0px 10px;">

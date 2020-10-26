@@ -3,7 +3,7 @@
 <mapper namespace="com.dao.order.OrderInfoMapper">
   
   
-  <resultMap id="BaseResultMap" type="com.entity.po.payOrder.TOrderInfo">
+  <resultMap id="BaseResultMap" type="com.entity.po.order.TOrderInfo">
     <!--
       WARNING - @mbg.generated
     -->
@@ -21,6 +21,9 @@
     <result column="invoiceFlg" jdbcType="CHAR" property="invoiceFlg" />
     <result column="invoiceType" jdbcType="VARCHAR" property="invoiceType" />
     <result column="orderDate" jdbcType="DATE" property="orderDate" />
+    <result column="orderQuantity" jdbcType="BIGINT" property="orderQuantity" />
+    <result column="purchasePrice" jdbcType="DECIMAL" property="purchasePrice" />
+    <result column="purchaseSource" jdbcType="VARCHAR" property="purchaseSource" />
     <result column="orderChannel" jdbcType="CHAR" property="orderChannel" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="mdseName" jdbcType="VARCHAR" property="mdseName" />
@@ -41,15 +44,18 @@
     <if test="_parameter == null">
       where 1 = 1
     </if>
-    and o.mdseNo = M.mdseNo
+    and o.mdseNo = m.mdseNo
     <if test="orderByClause != null">
       order by o.${orderByClause}
     </if>
   </select>
+    <select id="orderInfoCountAmount" resultType="java.math.BigDecimal">
+    SELECT SUM(actPayAmount) FROM t_order_info
+    </select>
 
-  <sql id="Order_Mdse_Column_List">
+    <sql id="Order_Mdse_Column_List">
     o.id, o.orderNo, o.mdseNo, o.custName, o.numberNo, o.address, o.orderAmount, o.actPayAmount, o.discountType,
-    o.orderStatus, o.logisticsNo, o.invoiceFlg, o.invoiceType, o.orderDate, o.orderChannel, o.remarks, m.mdseName
+    o.orderStatus, o.logisticsNo, o.invoiceFlg, o.invoiceType, o.orderDate,o.orderQuantity,o.purchasePrice,o.purchaseSource, o.orderChannel, o.remarks, m.mdseName
   </sql>
 
   <sql id="Example_Where_Clause">

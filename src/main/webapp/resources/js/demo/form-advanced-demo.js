@@ -74,7 +74,7 @@ $(document).ready(function () {
                 keyboardNavigation: false,
                 forceParse: false,
                 autoclose: true,
-                format: "yyyy-mm-dd"
+                format: "yyyy-MM-dd"
             });
 
             $('#data_3 .input-group.date').datepicker({

@@ -1,17 +1,9 @@
-/* Ion.RangeSlider, Flat UI Skin
-// css version 1.8.5
-// by Denis Ineshin | ionden.com
-// ===================================================================================================================*/
-
-/* =====================================================================================================================
-// Skin details */
-
 .irs-line-mid,
 .irs-line-left,
 .irs-line-right,
 .irs-diapason,
 .irs-slider {
-    background: url(../images/sprite-skin-flat.png) repeat-x;
+    background: url(../img/sprite-skin-flat.png) repeat-x;
 }
 
 .irs {
@@ -83,7 +75,4 @@
 }
 .irs-grid-text {
     color: #999;
-}
-
-.irs-disabled {
 }

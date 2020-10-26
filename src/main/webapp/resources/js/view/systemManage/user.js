@@ -197,7 +197,6 @@ function delUser(){
         type:"post",
         success:function(res){
             if(res.success){
-                $('#modal_user_del').modal('hide');
                 swal("删除成功！", "您已经永久删除了这些信息。", "success");
                 $("#btn_search").click();
             }else{

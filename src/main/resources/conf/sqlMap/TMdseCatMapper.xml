@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mdse.MdseCatMapper">
+  <resultMap id="BaseResultMap" type="com.entity.po.mdse.TMdseCat">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mdseCatNo" jdbcType="VARCHAR" property="mdsecatno" />
+    <result column="mdseCatName" jdbcType="VARCHAR" property="mdsecatname" />
+    <result column="parentId" jdbcType="BIGINT" property="parentid" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="creationTime" jdbcType="TIMESTAMP" property="creationtime" />
+  </resultMap>
+</mapper>

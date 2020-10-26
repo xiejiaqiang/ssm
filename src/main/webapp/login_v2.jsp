@@ -20,7 +20,7 @@
 
 </head>
 
-<body class="gray-bg">
+<body class="gray-bg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;"   background="${path }/resources/img/win1002.jpg">
 
 <div class="middle-box text-center loginscreen  animated fadeInDown">
     <div>

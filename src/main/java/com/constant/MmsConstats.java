@@ -17,5 +17,9 @@ public class MmsConstats {
 	public static final String DESC = "DESC";
 	//升序
 	public static final String ASC = "ASC";
+	//菜单关闭
+	public static final String CLOSE = "close";
+	//菜单不可增加按钮
+	public static final String IS_PARENT = "isParent";
 
 }

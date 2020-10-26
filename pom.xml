@@ -63,9 +63,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.guicedee.services</groupId>
-			<artifactId>apache-poi-ooxml</artifactId>
-			<version>62</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>4.1.2</version>
 		</dependency>
 
 		<dependency>
@@ -171,7 +176,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.41</version>
+			<version>8.0.22</version>
 		</dependency>
 		<!-- （jstl，servlet-api，junit） -->
 		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
@@ -188,7 +193,6 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<!-- 上传组件包 -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -212,13 +216,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
-		</dependency>
-
-		<!-- POI支持 -->
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.15</version>
 		</dependency>
 
 		<!-- cglib -->

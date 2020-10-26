@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ssm系统</title>
+<title>上海佳一后台管理系统</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
@@ -29,7 +29,7 @@
                             <h5>二次开发</h5>
                         </div>
                         <div class="ibox-content">
-                            <p>这是是利用众多框架及前台插件开发的通用ssm系统。</p>
+                            <p>这是是利用众多框架及前台插件开发的上海佳一后台管理系统。</p>
                             <p>使用时请注意如下声明：</p>
                             <ol>
                                 <li>本系统仅供学习和交流使用，禁止用于商业用途！</li>

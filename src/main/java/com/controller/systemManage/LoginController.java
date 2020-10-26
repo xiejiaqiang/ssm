@@ -1,5 +1,6 @@
 package com.controller.systemManage;
 
+import java.math.BigDecimal;
 import java.util.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import com.entity.po.Token;
 import com.entity.po.systemManage.User;
 import com.entity.vo.PageVO;
 import com.entity.vo.UpdateLogVO;
+import com.service.order.IOrderInfoService;
 import com.util.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -49,6 +51,8 @@ public class LoginController {
 	private LogServiceImpl logService;
 	@Autowired
 	private TokenServiceImpl tokenService;
+	@Autowired
+	private IOrderInfoService orderInfoService;
 	private static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
 	/**
@@ -110,6 +114,7 @@ public class LoginController {
 				session.setAttribute("currentOperationIds", role.getOperationids());  // 当前用户所拥有的按钮权限
 				//用户是不是登录判断
 				session.setAttribute("loginFlag",true);
+				setData(session);
 				// 勾选了两周内自动登录。
 				if ("on".equals(auto)) {
 					// 记住登录信息
@@ -174,6 +179,8 @@ public class LoginController {
 				session.setAttribute("currentOperationIds", role.getOperationids());  // 当前用户所拥有的按钮权限
 				//用户是不是登录判断
 				session.setAttribute("loginFlag",true);
+				//首页参数
+				setData(session);
 				pageVO.getMap().put(MmsConstats.DATA, true);
 			}
 			LOGGER.info(">>>>>>>>>>>>>>>>>>>>账号密码验证正常,验证结果为：{}", currentUser ==null?false:true);
@@ -183,6 +190,20 @@ public class LoginController {
 			LOGGER.error("!!!!!!!!!!!!!!!!!!!账号密码验证出现错误，错误信息：{},错误码：{}", e.getMessage(),e.getCause());
 		}
 		return pageVO;
+
+	}
+
+	private void setData(HttpSession session){
+		try {
+			//总订单金额
+			BigDecimal orderInfoCountAmount = orderInfoService.orderInfoCountAmount();
+			session.setAttribute("orderInfoCountAmount",orderInfoCountAmount);
+			//总订单条数
+			int orderInfoCount = orderInfoService.orderInfoCount();
+			session.setAttribute("orderInfoCount",orderInfoCount);
+		}catch (Exception e){
+			LOGGER.error("初始化数据加载失败[{}]", e);
+		}
 
 	}
 

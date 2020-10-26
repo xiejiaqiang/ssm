@@ -188,7 +188,20 @@
 					{//edit
 						height : 400,
 						reloadAfterSubmit : true,
-						closeAfterEdit : true
+						closeAfterEdit : true,
+						afterSubmit: function(xhr, postdata) {
+							var obj = eval('(' + xhr.responseText + ')');
+							if(obj.errorMsg){
+								$("#cData").click();
+								layer.alert(obj.errorMsg, {icon: 2});
+								return false;
+							}else{
+								$("#table_menu").trigger("reloadGrid");
+								$("#cData").click();
+								layer.alert("修改成功!", {icon: 1});
+								return true;
+							}
+						}
 					},
 					{//add
 						height : 400,
@@ -197,7 +210,20 @@
 					    	var ids = $("#table_menu").jqGrid('getGridParam', 'selrow');
 					    	frm.find('#parentid').val(parentid.value == '' ? ids : parentid.value);
 						},
-						closeAfterAdd : true
+						closeAfterAdd : true,
+						afterSubmit: function(xhr, postdata) {
+							var obj = eval('(' + xhr.responseText + ')');
+							if(obj.errorMsg){
+								$("#cData").click();
+								layer.alert(obj.errorMsg, {icon: 2});
+								return false;
+							}else{
+								$("#table_menu").trigger("reloadGrid");
+								$("#cData").click();
+								layer.alert("新增成功!", {icon: 1});
+								return true;
+							}
+						}
 					},
 					{//del
 						url : "deleteMenu.htm",
@@ -210,6 +236,7 @@
 	                		}else{
 	                			 $("#table_menu").trigger("reloadGrid");
 								$("#delmodtable_menu").hide();
+								layer.alert("删除成功!", {icon: 1});
 			                	return true;
 	                		}
 						}

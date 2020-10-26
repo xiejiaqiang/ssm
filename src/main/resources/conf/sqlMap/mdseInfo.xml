@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mdse.MdseInfoMapper">
+  
+  
+  <resultMap id="BaseResultMap" type="com.entity.po.mdse.TMdseInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mdseNo" jdbcType="VARCHAR" property="mdseNo" />
+    <result column="mdseName" jdbcType="VARCHAR" property="mdseName" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="colour" jdbcType="VARCHAR" property="colour" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="mdseCat" jdbcType="VARCHAR" property="mdseCat" />
+    <result column="mdseSku" jdbcType="TINYINT" property="mdseSku" />
+    <result column="mdseStatus" jdbcType="CHAR" property="mdseStatus" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="series" jdbcType="VARCHAR" property="series" />
+    <result column="sellingPoint" jdbcType="VARCHAR" property="sellingPoint" />
+    <result column="pictureId" jdbcType="BIGINT" property="pictureId" />
+    <result column="parameter1" jdbcType="VARCHAR" property="parameter1" />
+    <result column="parameter2" jdbcType="VARCHAR" property="parameter2" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="buyingPrice" jdbcType="DECIMAL" property="buyingPrice" />
+    <result column="retailPrice" jdbcType="DECIMAL" property="retailPrice" />
+    <result column="floorPrice" jdbcType="DECIMAL" property="floorPrice" />
+    <result column="tradePrice" jdbcType="DECIMAL" property="tradePrice" />
+    <result column="profit" jdbcType="DECIMAL" property="profit" />
+    <result column="profitMargin" jdbcType="VARCHAR" property="profitMargin" />
+  </resultMap>
+
+
+  <select id="selectMdseInfoAndMdsePrice" parameterType="com.entity.po.Example.mdse.TMdseInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="mdse_Info_price_Column_List" />
+    from t_mdse_info m left join t_mdse_price p ON m.mdseNo = p.mdseNo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="_parameter == null">
+      where 1 = 1
+    </if>
+    <if test="retailPriceMin != null">
+      and m.mdseNo IN (
+      SELECT mdseNo FROM t_mdse_price where
+      retailPrice &gt;= ${retailPriceMin} AND retailPrice &lt;= ${retailPriceMax})
+    </if>
+    <if test="orderByClause != null">
+      order by m.${orderByClause}
+    </if>
+  </select>
+    <select id="mdseInfoMdseCount" resultType="java.lang.Integer">
+    SELECT count(*) FROM t_mdse_info
+    </select>
+
+    <sql id="mdse_Info_price_Column_List">
+    m.id, m.mdseNo, m.mdseName, m.title, m.colour, m.model, m.mdseCat, m.mdseSku, m.mdseStatus, m.brand,
+    m.series, m.sellingPoint, m.pictureId, m.parameter1, m.parameter2, m.createTime, m.updateTime,
+    p.buyingPrice, p.retailPrice, p.floorprice, p.tradePrice, p.profit, p.profitMargin,p.id as priceId
+  </sql>
+
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      1 = 1
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="and (" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and m.${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and m.${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and m.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and m.${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+</mapper>

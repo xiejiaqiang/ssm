@@ -1,22 +1,17 @@
 package com.service.impl.order;
 
 import com.alibaba.fastjson.JSON;
-import com.controller.payOrder.PayOrderController;
 import com.dao.order.OrderInfoMapper;
 import com.entity.po.Example.payOrder.TOrderInfoExample;
-import com.entity.po.payOrder.TOrderInfo;
+import com.entity.po.order.TOrderInfo;
 import com.entity.vo.BathInsertResultVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
-import com.service.payOrder.IOrderInfoService;
+import com.service.order.IOrderInfoService;
 import com.util.DateUtil;
-import javafx.scene.control.Cell;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -67,10 +62,14 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	@Override
 	public BathInsertResultVO bathAddOrderInfo(MultipartFile file) throws Exception {
+		BathInsertResultVO resultVO = new BathInsertResultVO();
+		List<BathInsertResultVO.FailInfoVo> failInfoVoList = new ArrayList<BathInsertResultVO.FailInfoVo>();
+		int countSize = 0;
+		int successSize = 0;
+		int failSize =0;
 		int result = 0;
 		//存放excel表中所有user数据
 		List<TOrderInfo> orderInfoList = new ArrayList<TOrderInfo>();
-
 		//file.getOriginalFilename()方法 得到上传时的文件名
 		String fileName = file.getOriginalFilename();
 		//截取文件名的后缀
@@ -93,15 +92,25 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 			if(null != xssfs){
 				//line = 1 :从表的第二行开始获取记录
 				for(int line = 1; line <= xssfs.getLastRowNum();line++){
-
+					countSize = xssfs.getLastRowNum();
 					//excel表单的sheet的行对象
 					XSSFRow row = xssfs.getRow(line);
 					//如果某行为空，跳出本行
 					if(null == row){
 						continue;
 					}
-					TOrderInfo orderInfo = setOrderInfoXSSFRow(row);
-					orderInfoList.add(orderInfo);
+					try {
+						TOrderInfo orderInfo = setOrderInfoXSSFRow(row);
+						orderInfoList.add(orderInfo);
+					}catch (Exception e){
+						LOGGER.error("第[]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
+						failSize++;
+						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+						failInfoVo.setFailMsg("数据第"+line+"行导入失败");
+						failInfoVo.setOrderNo("请联系运维人员获得帮助！");
+						failInfoVoList.add(failInfoVo);
+					}
+
 
 				}
 			}
@@ -113,22 +122,28 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 			if(null != hssfs){
 				//line = 1 :从表的第二行开始获取记录
 				for(int line = 1; line <= hssfs.getLastRowNum();line++){
+					countSize = hssfs.getLastRowNum();
 					//excel表单的sheet的行对象
 					HSSFRow row = hssfs.getRow(line);
 					//如果某行为空，跳出本行
 					if(null == row){
 						continue;
 					}
-					TOrderInfo orderInfo = setOrderInfoHSSF(row);
-					orderInfoList.add(orderInfo);
+					try {
+						TOrderInfo orderInfo = setOrderInfoHSSF(row);
+						orderInfoList.add(orderInfo);
+					}catch (Exception e){
+						LOGGER.error("第[]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
+						failSize++;
+						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+						failInfoVo.setFailMsg("数据第"+line+"行导入失败");
+						failInfoVo.setOrderNo("请联系运维人员获得帮助！");
+						failInfoVoList.add(failInfoVo);
+					}
 				}
 			}
 		}
-		BathInsertResultVO resultVO = new BathInsertResultVO();
-		List<BathInsertResultVO.FailInfoVo> failInfoVoList = new ArrayList<BathInsertResultVO.FailInfoVo>();
-		int countSize = orderInfoList.size();
-		int successSize = 0;
-		int failSize =0;
+
 		for (int i=0; i<orderInfoList.size();i++){
 			try {
 				addOrderInfo(orderInfoList.get(i));
@@ -150,10 +165,8 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	};
 
 	private  TOrderInfo setOrderInfoXSSFRow(XSSFRow row){
-
 		row.getCell(0).setCellType(CellType.STRING);
 		String orderNo = row.getCell(0).getStringCellValue();
-
 		row.getCell(1).setCellType(CellType.STRING);
 		String mdseNo = row.getCell(1).getStringCellValue();
 		row.getCell(2).setCellType(CellType.STRING);
@@ -179,20 +192,28 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		Date orderDate = null;
 		String date = getDateValueXSSF(row.getCell(12).getCellType(), row.getCell(12));
 		try {
-			orderDate = DateUtil.ParseTime(date,"yyyy-mm-dd");
+			orderDate = DateUtil.ParseTime(date,"yyyy-MM-dd");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-
 		row.getCell(13).setCellType(CellType.STRING);
-		String orderChannel = row.getCell(13).getStringCellValue();
+		String orderQuantity = row.getCell(13).getStringCellValue();
 		row.getCell(14).setCellType(CellType.STRING);
-		String remarks = row.getCell(14).getStringCellValue();
+		BigDecimal purchasePrice = new BigDecimal(row.getCell(14).getStringCellValue());
+		row.getCell(15).setCellType(CellType.STRING);
+		String purchaseSource = row.getCell(15).getStringCellValue();
+		row.getCell(16).setCellType(CellType.STRING);
+		String orderChannel = row.getCell(16).getStringCellValue();
+		row.getCell(17).setCellType(CellType.STRING);
+		String remarks = row.getCell(17).getStringCellValue();
 		TOrderInfo orderInfo = new TOrderInfo();
 		orderInfo.setRemarks(remarks);
 		orderInfo.setOrderStatus(orderStatus);
 		orderInfo.setOrderNo(orderNo);
 		orderInfo.setOrderDate(orderDate);
+		orderInfo.setOrderQuantity(Integer.valueOf(orderQuantity));
+		orderInfo.setPurchasePrice(purchasePrice);
+		orderInfo.setPurchaseSource(purchaseSource);
 		orderInfo.setOrderChannel(orderChannel);
 		orderInfo.setOrderAmount(orderAmount);
 		orderInfo.setNumberNo(numberNo);
@@ -208,7 +229,6 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		return orderInfo;
 	};
 	private  TOrderInfo setOrderInfoHSSF(HSSFRow row){
-
 		row.getCell(0).setCellType(CellType.STRING);
 		String orderNo = row.getCell(0).getStringCellValue();
 
@@ -234,22 +254,31 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		String invoiceFlg = row.getCell(10).getStringCellValue();
 		row.getCell(11).setCellType(CellType.STRING);
 		String invoiceType = row.getCell(11).getStringCellValue();
-		String date = getDateValueHSSF(row.getCell(12).getCellType(), row.getCell(12));
+		String date = getDateValueHSSF(row.getCell(12).getCellTypeEnum(), row.getCell(12));
 		Date orderDate = null;
 		try {
-			orderDate = DateUtil.ParseTime(date,"yyyy-mm-dd");
+			orderDate = DateUtil.ParseTime(date,"yyyy-MM-dd");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		row.getCell(13).setCellType(CellType.STRING);
-		String orderChannel = row.getCell(13).getStringCellValue();
+		String orderQuantity = row.getCell(13).getStringCellValue();
 		row.getCell(14).setCellType(CellType.STRING);
-		String remarks = row.getCell(14).getStringCellValue();
+		BigDecimal purchasePrice = new BigDecimal(row.getCell(14).getStringCellValue());
+		row.getCell(15).setCellType(CellType.STRING);
+		String purchaseSource = row.getCell(15).getStringCellValue();
+		row.getCell(16).setCellType(CellType.STRING);
+		String orderChannel = row.getCell(16).getStringCellValue();
+		row.getCell(17).setCellType(CellType.STRING);
+		String remarks = row.getCell(17).getStringCellValue();
 		TOrderInfo orderInfo = new TOrderInfo();
 		orderInfo.setRemarks(remarks);
 		orderInfo.setOrderStatus(orderStatus);
 		orderInfo.setOrderNo(orderNo);
 		orderInfo.setOrderDate(orderDate);
+		orderInfo.setOrderQuantity(Integer.valueOf(orderQuantity));
+		orderInfo.setPurchasePrice(purchasePrice);
+		orderInfo.setPurchaseSource(purchaseSource);
 		orderInfo.setOrderChannel(orderChannel);
 		orderInfo.setOrderAmount(orderAmount);
 		orderInfo.setNumberNo(numberNo);
@@ -313,7 +342,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	};
 
 	// 删除
-	public Integer deleteOrderInfo(Integer id) throws Exception {
+	public Integer deleteOrderInfo(Long id) throws Exception {
 		return orderInfoMapper.deleteByPrimaryKey(id);
 	}
 
@@ -356,9 +385,14 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		return pageInfo;
 	}
 
-	;
+	@Override
+	public Integer orderInfoCount() throws Exception {
+		return orderInfoMapper.selectCount(new TOrderInfo());
+	}
 
-
-
+	@Override
+	public BigDecimal orderInfoCountAmount() throws Exception {
+		return orderInfoMapper.orderInfoCountAmount();
+	};
 
 }

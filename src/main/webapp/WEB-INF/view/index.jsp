@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ssm系统</title>
+<title>上海佳一后台管理系统</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
@@ -18,7 +18,7 @@
                     <h5>收入</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">40 886,200</h1>
+                    <h1 class="no-margins">${orderInfoCountAmount}</h1>
                     <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
                     </div>
                     <small>总收入</small>
@@ -32,7 +32,7 @@
                     <h5>订单</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">275,800</h1>
+                    <h1 class="no-margins">${orderInfoCount}</h1>
                     <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i>
                     </div>
                     <small>新订单</small>
@@ -46,7 +46,7 @@
                     <h5>访客</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">106,120</h1>
+                    <h1 class="no-margins">数据待更新</h1>
                     <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>
                     </div>
                     <small>新访客</small>
@@ -56,11 +56,11 @@
         <div class="col-sm-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-danger pull-right">最近一个月</span>
-                    <h5>活跃用户</h5>
+                    <span class="label label-danger pull-right">全渠道</span>
+                    <h5>在售商品</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">80,600</h1>
+                    <h1 class="no-margins">数据待更新</h1>
                     <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>
                     </div>
                     <small>12月</small>
