@@ -38,7 +38,7 @@ public class MdseInfoServiceImpl implements IMdseInfoService {
     }
 
     @Override
-    public TMdseInfo findMdseInfoById(Integer id) throws Exception {
+    public TMdseInfo findMdseInfoById(Long id) throws Exception {
         return mdseInfoMapper.selectByPrimaryKey(id);
     }
 

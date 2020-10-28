@@ -160,16 +160,16 @@
 	</div>
 
 	<!-- 新增和修改对话框 -->
-	<div class="modal fade" id="modal_mdseInfo_edit" role="dialog" aria-labelledby="modal_mdseInfo_edit" aria-hidden="true">
+	<div class="modal fade"  id="modal_mdseInfo_edit" role="dialog" aria-labelledby="modal_mdseInfo_edit" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-body">
 					<form id="form_mdseInfo" method="post" action="">
-						<input type="hidden" name="id" id="id" value=""/>
+						<input type="text" hidden name="id" id="id" value=""/>
 						<table style="border-collapse:separate; border-spacing:0px 10px;">
 							<tr class="hide">
 								<td>商品编号：</td>
-								<td><input type="hidden" id="mdseNo" name="mdseNo"
+								<td><input type="text" id="mdseNo" name="mdseNo"
 										   class="form-control" aria-required="true" required/></td>
 							</tr>
 							<tr>
@@ -179,8 +179,7 @@
 							</tr>
 							<tr>
 								<td>标题：</td>
-								<td><input type="text" id="title" name="title"
-										   class="form-control" /></td>
+								<td><input type="text" id="title" name="title"  class="form-control" /></td>
 							</tr>
 							<tr>
 								<td>颜色：</td>
@@ -194,7 +193,7 @@
 							</tr>
 							<tr>
 								<td>商品分类：</td>
-								<td><input type="hidden" id="mdseCat"  name="mdseCat"
+								<td><input type="text" hidden id="mdseCat"  name="mdseCat"
 										   class="form-control" aria-required="true" required/>
 									<div class="dropdown ">
 										<a id="dLabel_edit" role="button" data-toggle="dropdown" class="btn btn-success" data-target="#"
@@ -293,12 +292,7 @@
 							<tr>
 								<td valign="middle">卖点：</td>
 								<td colspan="4"><textarea rows="7" cols="50"
-														  name="sellingPoint	" id="sellingPoint"></textarea></td>
-							</tr>
-							<tr>
-								<td>零售指导价：</td>
-								<td><input type="number" min="0.99" max="99999999" id="retailPrice" name="retailPrice"
-										   class="form-control" aria-required="true" required/></td>
+														  name="sellingPoint" id="sellingPoint"></textarea></td>
 							</tr>
 							<tr>
 								<td>参数1：</td>
@@ -312,18 +306,27 @@
 							</tr>
 							<tr  class="hide">
 								<td>创建时间：</td>
-								<td><input type="hidden" id="createTime" name="createTime"
+								<td><input type="text" id="txt_Date_Time" name="txt_Date_Time"
 										   class="form-control"/></td>
 							</tr>
-
+							<tr  class="hide">
+								<td>商品价格：</td>
+								<td><input type="text" id="priceId" name="priceId"  class="form-control"/></td>
+								<td><input type="text" id="buyingPrice" name="buyingPrice"  class="form-control"/></td>
+								<td><input type="text" id="retailPrice" name="retailPrice"  class="form-control"/></td>
+								<td><input type="text" id="floorPrice" name="floorPrice"  class="form-control"/></td>
+								<td><input type="text" id="tradePrice" name="tradePrice"  class="form-control"/></td>
+								<td><input type="text" id="profit" name="profit"  class="form-control"/></td>
+								<td><input type="text" id="profitMargin" name="profitMargin"  class="form-control"/></td>
+							</tr>
 						</table>
 
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary"  id="submit_form_order_info_btn">保存</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary"  id="form_mdse_price_btn">价格录入</button>
+							<button type="button" class="btn btn-primary"  id="submit_form_mdse_info_btn">保存</button>
+							<button type="button" class="btn btn-default" id="mdse_price_btn_modal" data-dismiss="modal">关闭</button>
 						</div>
 					</form>
-
 				</div>
 
 			</div>
@@ -331,6 +334,64 @@
 		</div>
 
 	</div>
+	<!-- 价格 -->
+	<div class="modal fade"  id="modal_price_edit" role="dialog" aria-labelledby="modal_price_edit" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<form id="form_mdsePrice" method="post" action="">
+						<input type="text" hidden name="id" id="id" value=""/>
+						<table style="border-collapse:separate; border-spacing:0px 10px;">
+							<tr class="hide">
+								<td>商品编号：</td>
+								<td><input type="text" hidden id="mdseNo" name="mdseNo"
+										   class="form-control" aria-required="true" required/></td>
+							</tr>
+							<tr>
+								<td>进货价：</td>
+								<td><input type="number" min="0.99" max="99999999" id="buyingPrice" name="buyingPrice"
+										   class="form-control" aria-required="true" required/></td>
+							</tr>
+							<tr>
+								<td>零售指导价：</td>
+								<td><input type="number" min="0.99" max="99999999" id="retailPrice" name="retailPrice"
+										   class="form-control" aria-required="true" required/></td>
+							</tr>
+							<tr>
+								<td>底价：</td>
+								<td><input type="number" min="0.99" max="99999999" id="floorPrice" name="floorPrice"
+										   class="form-control" aria-required="true" required/></td>
+							</tr>
+							<tr>
+								<td>活动价：</td>
+								<td><input type="number" min="0.99" max="99999999" id="tradePrice" name="tradePrice"
+										   class="form-control"/></td>
+							</tr>
+							<tr>
+								<td>利润：</td>
+								<td><input type="number" min="0.99" max="99999999" id="profit" name="profit"
+										   class="form-control"/></td>
+							</tr>
+							<tr>
+								<td>利润率%：</td>
+								<td><input type="number" min="0.99" max="99999999" id="profitMargin" name="profitMargin"
+										   class="form-control"/></td>
+							</tr>
+						</table>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"  id="submit_form_mdse_price_btn">确定</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
 	<!-- 图片 -->
 
 		<div class="modal fade" id="modal_btn_mdse_Img" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modal_btn_mdse_Img">
@@ -393,6 +454,9 @@
 								</div>
 							</div>
 					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -401,8 +465,8 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-body">
-					<form id="form_ordePrice" method="post" action="">
-						<input type="hidden" name="id" id="id" value=""/>
+					<form id="form_price" method="post" action="">
+						<input type="text" hidden name="id" id="id" value=""/>
 						<table style="border-collapse:separate; border-spacing:0px 10px;">
 							<tr>
 								<td>商品编号：</td>
@@ -412,7 +476,7 @@
 							<tr>
 								<td>进货价：</td>
 								<td><input type="number" id="buyingPrice" name="buyingPrice"
-										   class="form-control" /></td>
+										   class="form-control" aria-required="true" required/></td>
 							</tr>
 							<tr>
 								<td>零售指导价：</td>
@@ -425,13 +489,13 @@
 										   class="form-control" aria-required="true" required/></td>
 							</tr>
 							<tr>
-								<td>批发价：</td>
+								<td>活动价：</td>
 								<td><input type="number" id="tradePrice" name="tradePrice"
 										   class="form-control"/></td>
 							</tr>
 							<tr>
 								<td>利润：</td>
-								<td><input type="number" id="profit" max="999999999" name="orderAmount"
+								<td><input type="number" id="profit" max="999999999" name="profit"
 										   class="form-control"/></td>
 							</tr>
 							<tr>
@@ -443,7 +507,7 @@
 						</table>
 
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary"  id="submit_form_mdse_price_btn">保存</button>
+							<button type="button" class="btn btn-primary"  id="submit_form_price_btn">保存</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 						</div>
 					</form>
@@ -456,5 +520,68 @@
 
 	</div>
 
+	<div class="modal fade" id="modal_mdse_price_view" role="dialog" aria-labelledby="modal_mdse_price_view" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="ibox-content">
+						<div>
+							<div>
+								<span>进货价</span>
+								<small class="pull-right" id="buyingPrice">20 GB</small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 50%;" id="buyingPrice-bar" class="progress-bar progress-bar-danger"></div>
+					</div>
+							<div>
+								<span>零售指导价</span>
+								<small class="pull-right" id="retailPrice">20 GB</small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 50%;" id="retailPrice-bar"  class="progress-bar"></div>
+							</div>
+							<div>
+								<span>底价</span>
+								<small class="pull-right" id ="floorPrice">10/200 GB</small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 60%;" id="floorPrice-bar" class="progress-bar progress-bar-warning"></div>
+							</div>
+
+							<div>
+								<span>活动价</span>
+								<small class="pull-right" id="tradePrice">20 GB</small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 50%;" id ="tradePrice-bar" class="progress-bar progress-bar-striped"></div>
+							</div>
+
+							<div>
+								<span>利润</span>
+								<small class="pull-right" id="profit">73%</small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 40%;"  id ="profit-bar"  class="progress-bar progress-bar-success" id="profit"></div>
+							</div>
+
+							<div>
+								<span>利润率</span>
+								<small class="pull-right progress-bar-info" id="profitMargin"></small>
+							</div>
+							<div class="progress progress-small">
+								<div style="width: 20%;"  id ="profitMargin-bar"  class="progress-bar progress-bar-info"></div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
 </body>
 </html>

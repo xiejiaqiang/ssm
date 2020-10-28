@@ -1,5 +1,6 @@
 package com.entity.po.mdse;
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class TMdseInfo implements Serializable {
     /**
      * 主键
      */
+    @Id
     @Column(name = "id")
     private Long id;
 
@@ -56,7 +58,7 @@ public class TMdseInfo implements Serializable {
      * 商品库存
      */
     @Column(name = "mdseSku")
-    private Byte mdseSku;
+    private Integer mdseSku;
 
     /**
      * 商品状态 0-待上市;1-已上市;2-已下市
@@ -137,7 +139,7 @@ public class TMdseInfo implements Serializable {
     private BigDecimal floorPrice;
 
     /**
-     * 批发价
+     * 活动价
      */
     @Transient
     private BigDecimal tradePrice;
@@ -212,11 +214,11 @@ public class TMdseInfo implements Serializable {
         this.mdseCat = mdseCat;
     }
 
-    public Byte getMdseSku() {
+    public Integer getMdseSku() {
         return mdseSku;
     }
 
-    public void setMdseSku(Byte mdseSku) {
+    public void setMdseSku(Integer mdseSku) {
         this.mdseSku = mdseSku;
     }
 

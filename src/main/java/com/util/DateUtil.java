@@ -161,4 +161,10 @@ int zuooDate =Integer.valueOf(zuoDate);
 	public static Date ParseTime(String date,String pattern) throws ParseException{
 		return new SimpleDateFormat(pattern).parse(date);
 	}
+
+	public static Date TimeStampToDate(String timeStamp){
+		long longTimeStamp = new Long(timeStamp);
+		Date date = new Date(longTimeStamp);
+		return date;
+	}
 }

@@ -17,7 +17,7 @@ public interface IMdseInfoService {
 	public Integer countMdseInfo(TMdseInfo t) throws Exception;
 
 	// 通过ID查询
-	public TMdseInfo findMdseInfoById(Integer id) throws Exception;
+	public TMdseInfo findMdseInfoById(Long id) throws Exception;
 
 	// 新增
 	public Integer addMdseInfo(TMdseInfo t) throws Exception;

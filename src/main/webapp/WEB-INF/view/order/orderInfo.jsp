@@ -105,7 +105,7 @@
 			<div class="modal-content">
 				<div class="modal-body">
 					<form id="form_orderInfo" method="post" action="">
-						<input type="hidden" name="id" id="id" value=""/>
+						<input type="text" hidden name="id" id="id" value=""/>
 						<table style="border-collapse:separate; border-spacing:0px 10px;">
 							<tr>
 								<td>订单编号：</td>

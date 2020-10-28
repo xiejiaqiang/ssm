@@ -18,9 +18,12 @@
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/bootstrap.min.css?v=3.3.6" />
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/bootstrap-table/bootstrap-table.min.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/font-awesome.css?v=4.4.0" />
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/iCheck/custom.css">
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/steps/jquery.steps.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/animate.css" />
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/style.css?v=4.1.0">
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/sweetalert/sweetalert.css">
+<link rel="stylesheet" type="text/css" href="${path }/resources/js/plugins/layer/laydate/skins/default/laydate.css">
 
 <!--[if lt IE 9]>
 <meta http-equiv="refresh" content="0;ie.html" />
@@ -51,3 +54,6 @@
 
 <!-- jQuery form  -->
 <script src="${path }/resources/js/jquery.form.min.js"></script>
+
+
+<script src="${path }/resources/js/plugins/staps/jquery.steps.min.js"></script>

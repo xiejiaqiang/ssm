@@ -471,7 +471,7 @@ function delUser(){
                 swal("删除成功！", "您已经永久删除了这些信息。", "success");
                 $("#btn_search").click();
             }else{
-                layerAlert(res.errorMsg, 2)
+                swal("删除失败！", res.errorMsg, "error");
             }
         }
     });

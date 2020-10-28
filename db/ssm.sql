@@ -296,7 +296,7 @@ CREATE TABLE `t_mdse_price` (
   `buyingPrice` decimal(10,2) NOT NULL COMMENT ''进货价'',
   `retailPrice` decimal(10,2) NOT NULL COMMENT ''零售指导价'',
   `floorPrice` decimal(10,2) NOT NULL COMMENT ''底价'',
-  `tradePrice` decimal(10,2) DEFAULT NULL COMMENT ''批发价'',
+  `tradePrice` decimal(10,2) DEFAULT NULL COMMENT ''活动价'',
   `profit` decimal(10,2) DEFAULT NULL COMMENT ''利润'',
   `profitMargin` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT ''利润率'',
   PRIMARY KEY (`id`),

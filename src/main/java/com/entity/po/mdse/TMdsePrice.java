@@ -1,4 +1,6 @@
 package com.entity.po.mdse;
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -10,41 +12,50 @@ public class TMdsePrice implements Serializable {
     /**
      * 主键
      */
+    @Id
+    @Column(name = "id")
     private Long id;
 
     /**
      * 商品编号
      */
+    @Column(name = "mdseNo")
     private String mdseNo;
 
     /**
      * 进货价
      */
+    @Column(name = "buyingPrice")
     private BigDecimal buyingPrice;
 
     /**
      * 零售指导价
      */
+    @Column(name = "retailPrice")
     private BigDecimal retailPrice;
 
     /**
      * 底价
      */
+    @Column(name = "floorPrice")
     private BigDecimal floorPrice;
 
     /**
-     * 批发价
+     * 活动价
      */
+    @Column(name = "tradePrice")
     private BigDecimal tradePrice;
 
     /**
      * 利润
      */
+    @Column(name = "profit")
     private BigDecimal profit;
 
     /**
      * 利润率
      */
+    @Column(name = "profitMargin")
     private String profitMargin;
 
     private static final long serialVersionUID = 1L;

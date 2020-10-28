@@ -7,6 +7,7 @@ import com.config.util.ConfigUtil;
 import com.controller.systemManage.LogController;
 import com.entity.po.mdse.TMdseCat;
 import com.entity.po.mdse.TMdseInfo;
+import com.entity.po.mdse.TMdsePrice;
 import com.entity.po.systemManage.Operation;
 import com.entity.po.systemManage.Role;
 import com.entity.po.systemManage.User;
@@ -15,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import com.service.impl.systemManage.OperationServiceImpl;
 import com.service.mdse.IMdseCatService;
 import com.service.mdse.IMdseInfoService;
+import com.service.mdse.IMdsePriceService;
 import com.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -40,6 +43,8 @@ public class MdseInfoController extends LogController {
 
 	@Autowired
 	private IMdseInfoService mdseInfoService;
+	@Autowired
+	private IMdsePriceService mdsePriceService;
 	@Autowired
 	private IMdseCatService mdseCatService;
 	@Autowired
@@ -105,17 +110,32 @@ public class MdseInfoController extends LogController {
 
 	// 新增或修改
 	@RequestMapping("reserveMdseInfo")
-	public void reserveMdseInfo(HttpServletRequest request, TMdseInfo mdseInfo, HttpServletResponse response){
+	public void reserveMdseInfo(HttpServletRequest request, TMdseInfo mdseInfo, String txt_Date_Time, HttpServletResponse response){
 		Long id = mdseInfo.getId();
 		JSONObject result=new JSONObject();
+		if(StringUtil.isEmpty(mdseInfo.getMdseNo())){
+			mdseInfo.setMdseNo(mdseInfo.getModel());
+		}
+		if(StringUtil.isEmpty(txt_Date_Time)){
+			mdseInfo.setCreateTime(new Date());
+		}else {
+			Date date = DateUtil.TimeStampToDate(txt_Date_Time);
+			mdseInfo.setCreateTime(date);
+		}
+		//获取商品价格
+		TMdsePrice mdsePrice = new TMdsePrice();
+		CopyUtils.copyBean(mdseInfo, mdsePrice);
+		mdsePrice.setId(mdseInfo.getPriceId());
 		try {
 			if (id != null) {   // Id不为空 说明是修改
-				mdseInfo.setCreateTime(new Date());
+				mdseInfo.setUpdateTime(new Date());
 				int status = mdseInfoService.updateMdseInfo(mdseInfo);
-					result.put("success", true);
+				    result.put("success", true);
 				if (status == 0){
 					result.put("success", false);
 					result.put("errorMsg", "对不起，更新失败");
+					WriterUtil.write(response, result.toString());
+					return;
 				}
 			}else {
 				mdseInfo.setCreateTime(new Date());
@@ -124,12 +144,85 @@ public class MdseInfoController extends LogController {
 				if (status == 0){
 					result.put("success", false);
 					result.put("errorMsg", "对不起，新增失败");
+					WriterUtil.write(response, result.toString());
+					return;
+				}
+			}
+			if (mdsePrice.getId() != null) {   // 商品价格id不为空 说明是修改
+				int status = mdsePriceService.updateMdsePrice(mdsePrice);
+				result.put("success", true);
+				if (status == 0){
+					result.put("success", false);
+					result.put("errorMsg", "商品新增成功，商品价格新增失败");
+				}
+			}else {
+				//初始化价格
+				if(mdsePrice.getBuyingPrice() == null){
+					mdsePrice.setBuyingPrice(BigDecimal.ZERO);
+				}
+				if(mdsePrice.getRetailPrice() == null){
+					mdsePrice.setRetailPrice(BigDecimal.ZERO);
+				}
+				if(mdsePrice.getFloorPrice() == null){
+					mdsePrice.setFloorPrice(BigDecimal.ZERO);
+				}
+				int status =mdsePriceService.addMdsePrice(mdsePrice);
+				result.put("success", true);
+				if (status == 0){
+					result.put("success", false);
+					result.put("errorMsg", "商品新增成功，商品价格更新失败");
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error("保存商品信息错误",e);
+			if(e.getLocalizedMessage().indexOf("Uni_Index")>0){
+				result.put("errorMsg", "操作失败!该商品已存在!");
+			}else {
+				result.put("errorMsg", "对不起，操作失败");
+			}
 			result.put("success", true);
-			result.put("errorMsg", "对不起，操作失败");
+		}
+		WriterUtil.write(response, result.toString());
+	}
+
+	// 新增或修改
+	@RequestMapping("reserveMdsePrice")
+	public void reserveMdsePrice(HttpServletRequest request, TMdsePrice mdsePrice, HttpServletResponse response){
+		JSONObject result=new JSONObject();
+		try {
+			if (mdsePrice.getId() != null) {   // 商品价格id不为空 说明是修改
+				int status = mdsePriceService.updateMdsePrice(mdsePrice);
+				result.put("success", true);
+				if (status == 0){
+					result.put("success", false);
+					result.put("errorMsg", "商品新增成功，商品价格新增失败");
+				}
+			}else {
+				//初始化价格
+				if(mdsePrice.getBuyingPrice() == null){
+					mdsePrice.setBuyingPrice(BigDecimal.ZERO);
+				}
+				if(mdsePrice.getRetailPrice() == null){
+					mdsePrice.setRetailPrice(BigDecimal.ZERO);
+				}
+				if(mdsePrice.getFloorPrice() == null){
+					mdsePrice.setFloorPrice(BigDecimal.ZERO);
+				}
+				int status =mdsePriceService.addMdsePrice(mdsePrice);
+				result.put("success", true);
+				if (status == 0){
+					result.put("success", false);
+					result.put("errorMsg", "商品新增成功，商品价格更新失败");
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("保存商品信息错误",e);
+			if(e.getLocalizedMessage().indexOf("Uni_Index")>0){
+				result.put("errorMsg", "操作失败!该商品已存在!");
+			}else {
+				result.put("errorMsg", "对不起，操作失败");
+			}
+			result.put("success", true);
 		}
 		WriterUtil.write(response, result.toString());
 	}
@@ -139,13 +232,16 @@ public class MdseInfoController extends LogController {
 		JSONObject result=new JSONObject();
 		try {
 			String[] ids=request.getParameter("ids").split(",");
-			for (String id : ids) {
-				mdseInfoService.deleteMdseInfo(Long.valueOf(id));
+			for (int i=0 ;i<ids.length;i++) {
+				TMdseInfo mdseInfo = mdseInfoService.findMdseInfoById(Long.valueOf(ids[i]));
+				mdseInfoService.deleteMdseInfo(Long.valueOf(ids[i]));
+				mdsePriceService.deleteByMdseNo(mdseInfo.getMdseNo());
 			}
 			result.put("success", true);
 			result.put("delNums", ids.length);
 		} catch (Exception e) {
 			LOGGER.error("删除商品信息错误[]",JSON.toJSONString(e));
+			result.put("success", false);
 			result.put("errorMsg", "对不起，删除失败");
 		}
 		WriterUtil.write(response, result.toString());
@@ -174,7 +270,7 @@ public class MdseInfoController extends LogController {
 		String [] str = new String[]{"主键","商品编号","商品名称","标题","颜色",
 				"型号","商品分类","商品库存","商品状态","品牌","系列","卖点",
 				"图片ID","参数1","参数2","创建时间","更新时间","进货价","零售指导价",
-				"底价","批发价","利润","利润率"};
+				"底价","活动价","利润","利润率"};
 		ExcelUtils.exportExcel("商品信息_"+DateUtil.getChar8()+".xls",str,mdseInfos,response,"yyyy-MM-dd");
 	}
 
