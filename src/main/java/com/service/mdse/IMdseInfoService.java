@@ -19,6 +19,9 @@ public interface IMdseInfoService {
 	// 通过ID查询
 	public TMdseInfo findMdseInfoById(Long id) throws Exception;
 
+	// 通过mdseNo查询
+	public TMdseInfo findMdseInfoByMdseNo(String mdseNo) throws Exception;
+
 	// 新增
 	public Integer addMdseInfo(TMdseInfo t) throws Exception;
 

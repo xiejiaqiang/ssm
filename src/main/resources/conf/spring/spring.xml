@@ -27,8 +27,8 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 		<property name="locations">
 			<list>
-				<value>classpath:conf/spring/config.properties</value>
-				<value>classpath:conf/spring/jdbc.properties</value>
+				<value>classpath:conf/config/config.properties</value>
+				<value>classpath:conf/config/jdbc.properties</value>
 			</list>
 		</property>
 	</bean>

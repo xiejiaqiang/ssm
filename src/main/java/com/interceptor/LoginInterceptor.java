@@ -6,10 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.entity.po.systemManage.User;
+import com.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter{
+
+	private static String username = "";
 	
 	public void afterCompletion(HttpServletRequest arg0,
 			HttpServletResponse arg1, Object arg2, Exception arg3)
@@ -43,8 +46,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	           		}
 				}
 			}
-			response.sendRedirect(request.getContextPath()+"/lockscreen.htm");
+			response.sendRedirect(request.getContextPath()+"/lockscreen.htm?username="+username);
 	        return true;
+		}else {
+			if (StringUtils.isEmpty(username)){
+				username = currentUser.getUsername();
+			}
 		}
 		return true;
 	}

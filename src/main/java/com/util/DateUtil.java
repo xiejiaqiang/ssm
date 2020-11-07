@@ -38,6 +38,86 @@ public class DateUtil {
 	public static String  getChar8(){
 		return DateFormatUtils.format(new Date(), DATE_CHAR);
 	}
+
+	/**
+	 * 将当前日期转为字符串，如：yyyyMMdd
+	 * @author Xie
+	 * @return String 返回当前日期的字符串，格式为（yyyyMMdd）
+	 */
+	public static String  getChar82(){
+		return DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+	}
+
+	/**
+	 * 获取前一个月日期
+	 * @return
+	 */
+	public static String  getBeforeMonth1(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, c.get(Calendar.MONTH) - 1);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+	/**
+	 * 获取前2个月日期
+	 * @return
+	 */
+	public static String  getBeforeMonth2(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, c.get(Calendar.MONTH) - 2);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+
+	/**
+	 * 获取前一天日期
+	 * @return
+	 */
+	public static String  getBeforeDate1(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.DATE, c.get(Calendar.DATE) - 1);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+	/**
+	 * 获取前2天日期
+	 * @return
+	 */
+	public static String  getBeforeDate2(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.DATE, c.get(Calendar.DATE) - 2);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+
+
+	/**
+	 * 获取前一年日期
+	 * @return
+	 */
+	public static String  getBeforeYear1(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+	/**
+	 * 获取前2年日期
+	 * @return
+	 */
+	public static String  getBeforeYear2(){
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 2);
+		Date day =  c.getTime();
+		String str=  new SimpleDateFormat("yyyy-MM-dd").format(day);
+		return str;
+	}
+
 	/**
 	 * 将当前时间转为字符串，如：HH:mm:ss
 	 * @author Xie

@@ -3,12 +3,18 @@ package com.service.impl.order;
 import com.alibaba.fastjson.JSON;
 import com.dao.order.OrderInfoMapper;
 import com.entity.po.Example.payOrder.TOrderInfoExample;
+import com.entity.po.mdse.TMdseInfo;
+import com.entity.po.mdse.TMdseRegion;
 import com.entity.po.order.TOrderInfo;
 import com.entity.vo.BathInsertResultVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.service.mdse.IMdseInfoService;
+import com.service.mdse.IMdseRegionService;
 import com.service.order.IOrderInfoService;
+import com.util.AddressResolutionUtil;
+import com.util.CopyUtils;
 import com.util.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
@@ -28,10 +34,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("orderInfoService")
 public class OrderInfoServiceImpl implements IOrderInfoService {
@@ -39,6 +42,10 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	@Autowired
 	OrderInfoMapper orderInfoMapper;
+	@Autowired
+	IMdseRegionService mdseRegionService;
+	@Autowired
+	IMdseInfoService mdseInfoService;
 
 	// 查询所有
 	public List<TOrderInfo> findOrderInfo(TOrderInfo t) throws Exception {
@@ -57,6 +64,35 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	// 新增
 	public Integer addOrderInfo(TOrderInfo t) throws Exception {
+		//新增销售地区
+		//解析地址
+		List<Map<String,String>> list = AddressResolutionUtil.addressResolution(t.getAddress());
+		try {
+			TMdseRegion mdseRegion = new TMdseRegion();
+			mdseRegion.setMdseNo(t.getMdseNo());
+			mdseRegion.setCity(list.get(0).get("city"));
+			List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(mdseRegion);
+			if(mdseRegions !=null && mdseRegions.size()>0){
+				mdseRegion = mdseRegions.get(0);
+				mdseRegion.setNumber(mdseRegion.getNumber()+Long.valueOf(t.getOrderQuantity()));
+				mdseRegionService.updateMdseRegion(mdseRegion);
+			}else {
+				mdseRegion = new TMdseRegion();
+				mdseRegion.setMdseNo(t.getMdseNo());
+				TMdseInfo mdseInfo = mdseInfoService.findMdseInfoByMdseNo(t.getMdseNo());
+				mdseRegion.setMdseCat(mdseInfo.getMdseCat());
+				//解析地址
+				mdseRegion.setProvince(AddressResolutionUtil.proinceZh(list.get(0).get("province")));
+				mdseRegion.setCity(list.get(0).get("city"));
+				mdseRegion.setArea(list.get(0).get("county"));
+				mdseRegion.setNumber(Long.valueOf(t.getOrderQuantity()));
+				mdseRegionService.addMdseRegion(mdseRegion);
+			}
+		}catch (Exception e){
+			LOGGER.error("销售地区写入数据库异常,异常信息:[{}]", e);
+		}
+
+
 		return orderInfoMapper.insert(t);
 	}
 
@@ -149,7 +185,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 				addOrderInfo(orderInfoList.get(i));
 				successSize = successSize +1;
 			}catch (Exception e){
-				LOGGER.error("新增失败", JSON.toJSONString(e));
+				LOGGER.error("新增失败{}", JSON.toJSONString(e));
 				failSize = failSize+1;
 				BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
 				failInfoVo.setFailMsg("数据库操作失败");
@@ -166,7 +202,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	private  TOrderInfo setOrderInfoXSSFRow(XSSFRow row){
 		row.getCell(0).setCellType(CellType.STRING);
-		String orderNo = row.getCell(0).getStringCellValue();
+		String orderNo = row.getCell(0).getReference();
 		row.getCell(1).setCellType(CellType.STRING);
 		String mdseNo = row.getCell(1).getStringCellValue();
 		row.getCell(2).setCellType(CellType.STRING);
@@ -176,9 +212,11 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		row.getCell(4).setCellType(CellType.STRING);
 		String address = row.getCell(4).getStringCellValue();
 		row.getCell(5).setCellType(CellType.STRING);
-		BigDecimal orderAmount = new BigDecimal(row.getCell(5).getStringCellValue());
+		String orderAmountStr = row.getCell(5).getStringCellValue();
 		row.getCell(6).setCellType(CellType.STRING);
-		BigDecimal actPayAmount = new BigDecimal(row.getCell(6).getStringCellValue());
+		String actPayAmountStr = row.getCell(6).getStringCellValue();
+		BigDecimal orderAmount = new BigDecimal(orderAmountStr);
+		BigDecimal actPayAmount = new BigDecimal(actPayAmountStr);
 		row.getCell(7).setCellType(CellType.STRING);
 		String discountType = row.getCell(7).getStringCellValue();
 		row.getCell(8).setCellType(CellType.STRING);
@@ -199,7 +237,8 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		row.getCell(13).setCellType(CellType.STRING);
 		String orderQuantity = row.getCell(13).getStringCellValue();
 		row.getCell(14).setCellType(CellType.STRING);
-		BigDecimal purchasePrice = new BigDecimal(row.getCell(14).getStringCellValue());
+		String purchasePriceStr = row.getCell(14).getStringCellValue();
+		BigDecimal purchasePrice = new BigDecimal(purchasePriceStr);
 		row.getCell(15).setCellType(CellType.STRING);
 		String purchaseSource = row.getCell(15).getStringCellValue();
 		row.getCell(16).setCellType(CellType.STRING);
@@ -387,12 +426,59 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	@Override
 	public Integer orderInfoCount() throws Exception {
-		return orderInfoMapper.selectCount(new TOrderInfo());
+		return orderInfoMapper.orderInfoCount();
 	}
 
 	@Override
 	public BigDecimal orderInfoCountAmount() throws Exception {
 		return orderInfoMapper.orderInfoCountAmount();
+	}
+
+	@Override
+	public List<TOrderInfo> orderListByGroupDate(String start, String end) throws Exception {
+
+		TOrderInfoExample example = new TOrderInfoExample();
+		TOrderInfoExample.Criteria criteria = example.createCriteria();
+		Calendar cal = Calendar.getInstance();
+		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01");
+		cal.setTime(startDate);
+		Date startTime = cal.getTime();
+		Date endTime = new Date();
+		if(com.util.StringUtil.isNotEmpty(start)){
+			startTime = DateUtil.ParseTime(start, "yyyy-MM-dd");
+		}
+		if(com.util.StringUtil.isNotEmpty(end)){
+			endTime = DateUtil.ParseTime(end, "yyyy-MM-dd");
+		}
+		criteria.andOrderdateBetween(startTime, endTime);
+		List<TOrderInfo> list = orderInfoMapper.selectOrderInfoByGroupDate(example);
+		return list;
+	}
+
+	@Override
+	public List<TOrderInfo> orderListByDate(String start, String end) throws Exception {
+
+		TOrderInfoExample example = new TOrderInfoExample();
+		TOrderInfoExample.Criteria criteria = example.createCriteria();
+		Calendar cal = Calendar.getInstance();
+		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01");
+		cal.setTime(startDate);
+		Date startTime = cal.getTime();
+		Date endTime = new Date();
+		if(com.util.StringUtil.isNotEmpty(start)){
+			startTime = DateUtil.ParseTime(start, "yyyy-MM-dd");
+		}
+		if(com.util.StringUtil.isNotEmpty(end)){
+			endTime = DateUtil.ParseTime(end, "yyyy-MM-dd");
+		}
+		criteria.andOrderdateBetween(startTime, endTime);
+		List<TOrderInfo> list = orderInfoMapper.selectOrderInfoByDate(example);
+		return list;
+	}
+
+	@Override
+	public List<TOrderInfo> orderInfo(int size) throws Exception {
+		return orderInfoMapper.selectOrderInfo(size);
 	};
 
 }

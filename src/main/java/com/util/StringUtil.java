@@ -2,6 +2,7 @@ package com.util;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class StringUtil {
@@ -87,6 +88,15 @@ public class StringUtil {
 	    }
 	    return integerSet;
 	}
-	
-	
+
+	public static String getRandomString(int length){
+		String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		Random random=new Random();
+		StringBuffer sb=new StringBuffer();
+		for(int i=0;i<length;i++){
+			int number=random.nextInt(62);
+			sb.append(str.charAt(number));
+		}
+		return sb.toString();
+	}
 }

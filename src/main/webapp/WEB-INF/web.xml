@@ -36,7 +36,7 @@
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 	<session-config>
-		<session-timeout>15</session-timeout>
+		<session-timeout>60</session-timeout>
 	</session-config>
 
 	<!-- 3、字符编码过滤器，一定要放在所有过滤器之前 -->

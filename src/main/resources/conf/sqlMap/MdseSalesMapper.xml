@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mdse.MdseSalesMapper">
+  
+  
+  <resultMap id="BaseResultMap" type="com.entity.po.mdse.TMdseSales">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="platformId" jdbcType="VARCHAR" property="platformId" />
+    <result column="mdseNo" jdbcType="VARCHAR" property="mdseNo" />
+    <result column="salesChannel" jdbcType="CHAR" property="salesChannel" />
+    <result column="dailyPrice" jdbcType="DECIMAL" property="dailyPrice" />
+    <result column="activityPrice" jdbcType="DECIMAL" property="activityPrice" />
+    <result column="promotionPrice" jdbcType="DECIMAL" property="promotionPrice" />
+    <result column="preferentialAmount" jdbcType="DECIMAL" property="preferentialAmount" />
+    <result column="preferentialType" jdbcType="CHAR" property="preferentialType" />
+    <result column="salesStatus" jdbcType="CHAR" property="salesStatus" />
+    <result column="salesSku" jdbcType="BIGINT" property="salesSku" />
+    <result column="mdseUrl" jdbcType="VARCHAR" property="mdseUrl" />
+  </resultMap>
+
+
+
+  <select id="selectMdseSalesAndMdseInfo" parameterType="com.entity.po.Example.mdse.TMdseSalesExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Mdse_Sales_Column_List" />
+    from t_mdse_sales s,t_mdse_info m
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="_parameter == null">
+      where 1 = 1
+    </if>
+    and s.mdseNo = m.mdseNo
+    <if test="orderByClause != null">
+      order by s.${orderByClause}
+    </if>
+  </select>
+
+    <sql id="Mdse_Sales_Column_List">
+        s.id, s.platformId, s.mdseNo, s.salesChannel, s.dailyPrice, s.activityPrice, s.promotionPrice, s.preferentialAmount,
+    s.preferentialType, s.salesSku,s.salesStatus, s.mdseUrl
+  </sql>
+
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      1 = 1
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="and (" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and s.${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and s.${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and s.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and s.${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+</mapper>

@@ -18,13 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("mdseInfoService")
 public class MdseInfoServiceImpl implements IMdseInfoService {
-    static Logger LOGGER = LoggerFactory.getLogger(OrderInfoServiceImpl.class);
+    static Logger LOGGER = LoggerFactory.getLogger(MdseInfoServiceImpl.class);
     @Autowired
     MdseInfoMapper mdseInfoMapper;
     @Override
@@ -40,6 +38,13 @@ public class MdseInfoServiceImpl implements IMdseInfoService {
     @Override
     public TMdseInfo findMdseInfoById(Long id) throws Exception {
         return mdseInfoMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public TMdseInfo findMdseInfoByMdseNo(String mdseNo) throws Exception {
+        TMdseInfo mdseInfo = new TMdseInfo();
+        mdseInfo.setMdseNo(mdseNo);
+        return mdseInfoMapper.selectOne(mdseInfo);
     }
 
     @Override
@@ -69,10 +74,24 @@ public class MdseInfoServiceImpl implements IMdseInfoService {
             criteria.andMdsenameLike("%"+t.getMdseName()+"%");
         }
         if(StringUtil.isNotEmpty(t.getModel())){
-            criteria.andModelLike(t.getModel());
+            if(t.getModel().indexOf("&")>0){
+                String [] str = t.getModel().split("&");
+                List<String> list = Arrays.asList(str);
+                criteria.andModelIn(list);
+            }else {
+                criteria.andModelLike("%"+t.getModel()+"%");
+            }
+
         }
         if(StringUtil.isNotEmpty(t.getColour())){
-            criteria.andColourLike(t.getColour());
+            if(t.getColour().indexOf("&")>0){
+                String [] str = t.getColour().split("&");
+                List<String> list = Arrays.asList(str);
+                criteria.andColourIn(list);
+            }else {
+                criteria.andColourLike("%"+t.getColour()+"%");
+            }
+
         }
         if(mdseCats !=null && mdseCats.size()>0){
             criteria.andMdsecatIn(mdseCats);

@@ -41,4 +41,13 @@ public interface IOrderInfoService {
 	// 查询总金额
 	public BigDecimal orderInfoCountAmount() throws Exception;
 
+	// 按日期查询订单
+	public List<TOrderInfo> orderListByGroupDate(String start, String end) throws Exception;
+
+	// 按日期查询订单
+	public List<TOrderInfo> orderListByDate(String start, String end) throws Exception;
+
+
+	// 查询最新交易的n条数据
+	public List<TOrderInfo> orderInfo(int size) throws Exception;
 }

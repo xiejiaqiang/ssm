@@ -49,14 +49,59 @@
       order by o.${orderByClause}
     </if>
   </select>
+
+  <select id="selectOrderInfoByGroupDate" parameterType="com.entity.po.Example.payOrder.TOrderInfoExample" resultMap="BaseResultMap">
+    SELECT SUM(o.orderAmount) AS orderAmount,o.orderDate,COUNT(o.orderNo) AS remarks FROM t_order_info o
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="_parameter == null">
+      where 1 = 1
+    </if>
+    GROUP BY o.orderDate
+    ORDER BY orderDate
+  </select>
+
+  <select id="selectOrderInfoByDate" parameterType="com.entity.po.Example.payOrder.TOrderInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Order_List" />
+    from t_order_info o
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="_parameter == null">
+      where 1 = 1
+    </if>
+
+  </select>
+
+
     <select id="orderInfoCountAmount" resultType="java.math.BigDecimal">
     SELECT SUM(actPayAmount) FROM t_order_info
+    </select>
+
+  <select id="orderInfoCount" resultType="java.lang.Integer">
+    SELECT COUNT(orderNo) FROM t_order_info
     </select>
 
     <sql id="Order_Mdse_Column_List">
     o.id, o.orderNo, o.mdseNo, o.custName, o.numberNo, o.address, o.orderAmount, o.actPayAmount, o.discountType,
     o.orderStatus, o.logisticsNo, o.invoiceFlg, o.invoiceType, o.orderDate,o.orderQuantity,o.purchasePrice,o.purchaseSource, o.orderChannel, o.remarks, m.mdseName
   </sql>
+
+
+  <sql id="Order_List">
+    o.id, o.orderNo, o.mdseNo, o.custName, o.numberNo, o.address, o.orderAmount, o.actPayAmount, o.discountType,
+    o.orderStatus, o.logisticsNo, o.invoiceFlg, o.invoiceType, o.orderDate,o.orderQuantity,o.purchasePrice,o.purchaseSource, o.orderChannel, o.remarks
+  </sql>
+
+  <select id="selectOrderInfo"  parameterType="java.lang.Integer"  resultMap="BaseResultMap">
+    SELECT * FROM t_order_info ORDER BY id DESC LIMIT 0,#{size,jdbcType=BIGINT}
+  </select>
+
 
   <sql id="Example_Where_Clause">
     <!--

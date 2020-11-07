@@ -32,13 +32,13 @@
 			<div class="col-sm-3">
 				<div class="form-group">
 					<label  class="control-label">型号</label>
-					<input type="test" name="txt_model"  placeholder="请输入型号" id="txt_model" class="form-control">
+					<input type="test" name="txt_model"  placeholder="多个型号用&分割" id="txt_model" class="form-control">
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
 					<label  class="control-label">颜色</label>
-					<input type="test" name="txt_colour"  placeholder="请输入颜色" id="txt_colour" class="form-control">
+					<input type="test" name="txt_colour"  placeholder="多个颜色用&分割" id="txt_colour" class="form-control">
 				</div>
 			</div>
 			<div class="col-sm-3">
@@ -528,21 +528,21 @@
 						<div>
 							<div>
 								<span>进货价</span>
-								<small class="pull-right" id="buyingPrice">20 GB</small>
+								<small class="pull-right" id="buyingPrice"></small>
 							</div>
 							<div class="progress progress-small">
 								<div style="width: 50%;" id="buyingPrice-bar" class="progress-bar progress-bar-danger"></div>
 					</div>
 							<div>
 								<span>零售指导价</span>
-								<small class="pull-right" id="retailPrice">20 GB</small>
+								<small class="pull-right" id="retailPrice"></small>
 							</div>
 							<div class="progress progress-small">
 								<div style="width: 50%;" id="retailPrice-bar"  class="progress-bar"></div>
 							</div>
 							<div>
 								<span>底价</span>
-								<small class="pull-right" id ="floorPrice">10/200 GB</small>
+								<small class="pull-right" id ="floorPrice"></small>
 							</div>
 							<div class="progress progress-small">
 								<div style="width: 60%;" id="floorPrice-bar" class="progress-bar progress-bar-warning"></div>
@@ -550,7 +550,7 @@
 
 							<div>
 								<span>活动价</span>
-								<small class="pull-right" id="tradePrice">20 GB</small>
+								<small class="pull-right" id="tradePrice"></small>
 							</div>
 							<div class="progress progress-small">
 								<div style="width: 50%;" id ="tradePrice-bar" class="progress-bar progress-bar-striped"></div>
@@ -558,7 +558,7 @@
 
 							<div>
 								<span>利润</span>
-								<small class="pull-right" id="profit">73%</small>
+								<small class="pull-right" id="profit"></small>
 							</div>
 							<div class="progress progress-small">
 								<div style="width: 40%;"  id ="profit-bar"  class="progress-bar progress-bar-success" id="profit"></div>

@@ -9,7 +9,7 @@ public class PropertiesUtil {
 	
 	static {
 		Properties pros = new Properties();
-		InputStream in = PropertiesUtil.class.getResourceAsStream("/conf/spring/config.properties");
+		InputStream in = PropertiesUtil.class.getResourceAsStream("/conf/config/config.properties");
 		try {
 			pros.load(in);
 			url = pros.getProperty("log4j.appender.File.File");

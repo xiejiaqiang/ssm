@@ -11,9 +11,9 @@ public interface IMdseCatService {
 
 	public TMdseCat findMdseCat(Long id) throws Exception;
 
-	public List<TMdseCat> findMdseCat(TMdseCat t) throws Exception ;
-
 	public Integer countMdseCat(TMdseCat t) throws Exception ;
+
+	public List<TMdseCat> findMdseCat(TMdseCat t) throws Exception ;
 
 	public void deleteMdseCat(Long roleid) throws Exception ;
 

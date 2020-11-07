@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.mdse.MdseRegionMapper">
+  
+  
+  <resultMap id="BaseResultMap" type="com.entity.po.mdse.TMdseRegion">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="mdseNo" jdbcType="VARCHAR" property="mdseNo" />
+    <result column="mdseCat" jdbcType="BIGINT" property="mdseCat" />
+    <result column="number" jdbcType="BIGINT" property="number" />
+
+  </resultMap>
+
+  <select id="selectMdseRegionInfo" parameterType="list" resultMap="BaseResultMap">
+    select
+    province,SUM(number) as number
+    from t_mdse_region
+    <if test="list != null and list.size() > 0">
+    where mdseCat in
+    <foreach collection="list" item="item" separator=","
+             open="(" close=")">
+      #{item, jdbcType=VARCHAR}
+    </foreach>
+    </if>
+    GROUP BY province ;
+  </select>
+
+  <select id="selectMdseRegionByMdseNoGroup" parameterType="string" resultMap="BaseResultMap">
+    select
+    province, SUM(number) as number,mdseNo
+    from t_mdse_region
+      where mdseNo =  #{list, jdbcType=VARCHAR}
+    GROUP BY province ;
+  </select>
+
+  <select id="findMdseRegionGroupMdseNo" parameterType="string" resultMap="BaseResultMap">
+    select
+      SUM(number) as number,mdseNo
+    from t_mdse_region
+      where mdseCat =  #{list, jdbcType=VARCHAR}
+    GROUP BY mdseNo ;
+  </select>
+
+</mapper>

@@ -115,7 +115,7 @@
 							<tr>
 								<td>商品编号：</td>
 								<td><input type="text" id="mdseNo" name="mdseNo"
-										   class="form-control" /></td>
+										   class="form-control" aria-required="true" required//></td>
 							</tr>
 							<tr>
 								<td>客户姓名：</td>

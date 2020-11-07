@@ -215,8 +215,23 @@ var TableInit = function () {
                 },
                 {
                     field: 'sellingPoint',
-                    title: '卖点',
+                    title: '卖点&#12288&#12288&#12288&#12288&#12288&#12288',
                     sortable:true
+                },
+                {
+                    title: '价格',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return '<a href="javascript:viewMdsePrice()">查看</a>';
+                    }
+                },
+                {
+                    field: 'pictureId',
+                    title: '图片管理',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return '<a href="javascript:viewMdseImg('+value+')">查看</a>';
+                    }
                 },
                 {
                     field: 'parameter1',
@@ -273,21 +288,6 @@ var TableInit = function () {
                     title: '价格表ID',
                     sortable:false,
                     visible: false
-                },
-                {
-                    title: '价格',
-                    sortable:true,
-                    formatter:function(value,row,index){
-                            return '<a href="javascript:viewMdsePrice()">查看</a>';
-                    }
-                },
-                {
-                    field: 'pictureId',
-                    title: '图片管理',
-                    sortable:true,
-                    formatter:function(value,row,index){
-                        return '<a href="javascript:viewMdseImg('+value+')">查看</a>';
-                    }
                 }],
             onClickRow: function (row) {
             }
@@ -518,6 +518,7 @@ function viewMdsePrice(getSelection){
     $('#modal_mdse_price_view').modal('show');
 
 }
+
 $(function () { $("[data-toggle='popover']").popover(); });
 
 

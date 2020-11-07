@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.constant.MmsConstats;
 import com.constant.ModuleTypeCode;
+import com.entity.po.mdse.TMdseInfo;
+import com.entity.po.order.TOrderInfo;
 import com.entity.po.systemManage.Log;
 import com.entity.po.systemManage.Menu;
 import com.entity.po.systemManage.Role;
@@ -15,6 +17,7 @@ import com.entity.po.Token;
 import com.entity.po.systemManage.User;
 import com.entity.vo.PageVO;
 import com.entity.vo.UpdateLogVO;
+import com.service.mdse.IMdseInfoService;
 import com.service.order.IOrderInfoService;
 import com.util.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -53,6 +56,8 @@ public class LoginController {
 	private TokenServiceImpl tokenService;
 	@Autowired
 	private IOrderInfoService orderInfoService;
+	@Autowired
+	private IMdseInfoService mdseInfoService;
 	private static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
 	/**
@@ -201,6 +206,14 @@ public class LoginController {
 			//总订单条数
 			int orderInfoCount = orderInfoService.orderInfoCount();
 			session.setAttribute("orderInfoCount",orderInfoCount);
+			//前六订单
+			List<TOrderInfo> orderInfos = orderInfoService.orderInfo(6);
+			session.setAttribute("orderInfos",orderInfos);
+			//总商品数
+			TMdseInfo t = new TMdseInfo();
+			t.setMdseStatus("1");
+			int mdseSize = mdseInfoService.countMdseInfo(t);
+			session.setAttribute("mdseSize",mdseSize);
 		}catch (Exception e){
 			LOGGER.error("初始化数据加载失败[{}]", e);
 		}

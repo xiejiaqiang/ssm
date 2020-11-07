@@ -4,6 +4,7 @@ $(function () {
     deleteOrderInfoURL = 'deleteOrderInfo.htm' ;//删除
     batchImportURL = 'batchImport.htm' ;//批量导入
     exportURL = 'export.htm' ;//导出
+    findMdseNoURL = 'findMdseNo.htm' ;//
     init();
     $("#btn_search").bind("click",function(){
         //先销毁表格
@@ -14,20 +15,33 @@ $(function () {
 
     var validator = $("#form_orderInfo").validate({
         submitHandler: function(form){
-            $(form).ajaxSubmit({
+            var mdseNo = $("#form_orderInfo #mdseNo").val();
+            $.ajax({
+                url:findMdseNoURL,
                 dataType:"json",
-                success: function (data) {
-
-                    if(data.success && !data.errorMsg ){
-                        layerAlert("操作成功！",1)
-                        validator.resetForm();
-                        $('#modal_orderInfo_edit').modal('hide');
-                        $("#btn_search").click();
+                data:{"mdseNo":mdseNo},
+                type:"post",
+                success:function(res){
+                    if(res.success){
+                        $(form).ajaxSubmit({
+                            dataType:"json",
+                            success: function (data) {
+                                if(data.success && !data.errorMsg ){
+                                    layerAlert("操作成功！",1)
+                                    validator.resetForm();
+                                    $('#modal_orderInfo_edit').modal('hide');
+                                    $("#btn_search").click();
+                                }else{
+                                    layerAlert(data.errorMsg, 2)
+                                }
+                            }
+                        });
                     }else{
-                        layerAlert(data.errorMsg, 2)
+                        layerAlert("根据商品编号未查询到商品信息", 2)
                     }
                 }
             });
+
         }
     });
     $("#submit_form_order_info_btn").click(function(){
@@ -302,8 +316,9 @@ var FileInput = function () {
             $("#modal_btn_import").modal("hide");
             var success = data.response.success;
             var dataInfo = data.response.data;
+            var errorMsg= data.response.errorMsg;
             if (success == false) {
-                layerAlert(res.errorMsg, 2)
+                layerAlert(errorMsg, 2)
                 return;
             }else{
                 if(dataInfo == undefined ||dataInfo[0] == undefined){

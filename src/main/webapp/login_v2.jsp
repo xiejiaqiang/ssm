@@ -50,9 +50,17 @@
         </form>
     </div>
 </div>
+<div class="middle-box text-center   ">
 
-
-<%--
+        <span class="lh">©2020&nbsp;ShangHaiJiaYi&nbsp;</span>
+        <span class="lh">(沪)-经营性-2020-2020</span>
+    <div>
+        <a href="http://beian.miit.gov.cn/" target="_blank">
+            <span class="lh">沪ICP备2020033046号</span>
+        </a>
+    </div>
+</div>
+    <%--
 <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 --%>
 <!--统计代码，可删除-->

@@ -21,6 +21,7 @@ import com.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -113,9 +114,7 @@ public class MdseInfoController extends LogController {
 	public void reserveMdseInfo(HttpServletRequest request, TMdseInfo mdseInfo, String txt_Date_Time, HttpServletResponse response){
 		Long id = mdseInfo.getId();
 		JSONObject result=new JSONObject();
-		if(StringUtil.isEmpty(mdseInfo.getMdseNo())){
 			mdseInfo.setMdseNo(mdseInfo.getModel());
-		}
 		if(StringUtil.isEmpty(txt_Date_Time)){
 			mdseInfo.setCreateTime(new Date());
 		}else {
@@ -175,7 +174,7 @@ public class MdseInfoController extends LogController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("保存商品信息错误",e);
-			if(e.getLocalizedMessage().indexOf("Uni_Index")>0){
+			if(e instanceof DuplicateKeyException){
 				result.put("errorMsg", "操作失败!该商品已存在!");
 			}else {
 				result.put("errorMsg", "对不起，操作失败");
@@ -217,7 +216,7 @@ public class MdseInfoController extends LogController {
 			}
 		} catch (Exception e) {
 			LOGGER.error("保存商品信息错误",e);
-			if(e.getLocalizedMessage().indexOf("Uni_Index")>0){
+			if(e instanceof DuplicateKeyException){
 				result.put("errorMsg", "操作失败!该商品已存在!");
 			}else {
 				result.put("errorMsg", "对不起，操作失败");

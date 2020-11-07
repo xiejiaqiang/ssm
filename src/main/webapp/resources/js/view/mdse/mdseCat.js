@@ -40,7 +40,7 @@ var TableInit = function () {
             colModel : [ {
                 name : "id",
                 index : "id",
-                hidden : true,
+                hidden : false,
                 editable : true,
                 key : true
             }, {

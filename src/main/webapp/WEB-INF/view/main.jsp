@@ -165,7 +165,11 @@
 			</div>
 			<div class="footer">
 				<div class="pull-right">
-					&copy; 2020-2020 <a href="http://www.baidu.com/" target="_blank">ShangHaiJiaYi</a>
+					©2020&nbsp;ShangHaiJiaYi&nbsp;
+					<span class="lh">(沪)-经营性-2020-2020</span>
+					<a href="http://beian.miit.gov.cn/" target="_blank">
+						<span class="lh">沪ICP备2020033046号</span>
+					</a>
 				</div>
 			</div>
 		</div>

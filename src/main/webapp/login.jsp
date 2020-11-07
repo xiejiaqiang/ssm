@@ -87,8 +87,13 @@
     </div>
     <div class="signup-footer">
         <div class="pull-left">
-            &copy; 2020 All Rights Reserved. H+
+            ©2020&nbsp;ShangHaiJiaYi&nbsp;
+            <span class="lh">(沪)-经营性-2020-2020</span>
+            <a href="http://beian.miit.gov.cn/" target="_blank">
+                <span class="lh">沪ICP备2020033046号</span>
+            </a>
         </div>
+
     </div>
 </div>
 </body>
