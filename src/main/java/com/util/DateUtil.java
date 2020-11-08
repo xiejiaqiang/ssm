@@ -161,6 +161,15 @@ public class DateUtil {
 	public static String  getChar14(){
 		return DateFormatUtils.format(new Date(), "yyyMMddHHmmss");
 	}
+
+	/**
+	 * 将当前日期转为字符串，如：yyyMMddHHmmss
+	 * @author Xie
+	 * @return String 返回当前日期的字符串，格式为（yyyMMddHHmmss）
+	 */
+	public static String  getChar17(){
+		return DateFormatUtils.format(new Date(), "yyyMMddHHmmssSSS");
+	}
 	
 	/**
 	 * 将当前日期转为字符串，如：yyyy-MM-dd HH:mm:ss.S

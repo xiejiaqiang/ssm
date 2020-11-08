@@ -12,10 +12,7 @@ import com.github.pagehelper.PageInfo;
 import com.service.file.IFileInfoService;
 import com.service.impl.systemManage.OperationServiceImpl;
 import com.service.sales.IGiftInfoService;
-import com.util.DateUtil;
-import com.util.FtpUtils;
-import com.util.StringUtil;
-import com.util.WriterUtil;
+import com.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +39,10 @@ public class GiftInfoController extends LogController {
 	private IGiftInfoService giftInfoService;
 	@Autowired
 	private OperationServiceImpl operationService;
-	private FtpUtils ftpUtils = new FtpUtils();
 	@Autowired
 	private IFileInfoService fileInfoService;
+	private FtpUtils ftpUtils = new FtpUtils();
+
 	@RequestMapping("giftInfoIndex")
 	public String index(HttpServletRequest request, Integer menuid) throws Exception {
 		List<Operation> operationList = operationService.findOperationIdsByMenuid(menuid);
@@ -70,12 +68,16 @@ public class GiftInfoController extends LogController {
 			throw e;
 		}
 	}
-
 	// 新增或修改
 	@RequestMapping("reserveGiftInfo")
 	public void reserveGiftInfo(HttpServletRequest request, TGiftInfo giftInfo, HttpServletResponse response){
 		Long id = giftInfo.getId();
 		JSONObject result=new JSONObject();
+		if(StringUtil.isEmpty(giftInfo.getGiftLink())){
+			if(giftInfo.getGiftLink().contains("https://")){
+				giftInfo.setGiftLink(giftInfo.getGiftLink().substring(8));
+			}
+		}
 		try {
 			if (id != null) {   // Id不为空 说明是修改
 				int status = giftInfoService.updateGiftInfo(giftInfo);
@@ -134,8 +136,8 @@ public class GiftInfoController extends LogController {
 			List<TFileInfo> fileInfo = fileInfoService.findFileInfoByBathNo(t.getGiftImg());
 			if (fileInfo !=null && fileInfo.size()>0){
 				for (int i = 0; i <fileInfo.size() ; i++) {
-					//下载图片
-					boolean delFlag = ftpUtils.deleteFile(fileInfo.get(i).getFilePath(),fileInfo.get(i).getSavefileName());
+					//删除图片
+					boolean delFlag = DxlFileUtil.deleteFile(fileInfo.get(i).getFilePath(),fileInfo.get(i).getSavefileName());
 					LOGGER.info("图片[{}]删除结果:[{}]",fileInfo.get(i).getSavefileName(),delFlag);
 				}
 			}
@@ -166,15 +168,15 @@ public class GiftInfoController extends LogController {
 				//截取文件名的后缀
 				String suffix = fileName.substring(fileName.lastIndexOf(".")+1);
 				//生成新的文件名
-				String saveFileName = "GiftInfo_"+upload_id+"_"+DateUtil.getChar14()+"."+suffix;
+				String saveFileName = "GiftInfo_"+upload_id+"_"+DateUtil.getChar17()+"."+suffix;
 				LOGGER.info("batchUpload 上传礼品图片[{}]", fileName);
-				ftpUtils.uploadFile("/img",saveFileName, file.getInputStream());
+				DxlFileUtil.upFile(file.getInputStream(),saveFileName,"/home/ftp/img/gift");
 				LOGGER.info("batchUpload 上传礼品图片[{}]成功", fileName);
 				//保存文件信息表
 				TFileInfo t = new TFileInfo();
 				t.setBatchNo(batchNo);
 				t.setFileName(fileName);
-				t.setFilePath("/img");
+				t.setFilePath("/home/ftp/img/gift");
 				t.setFileSuffix(suffix);
 				t.setSavefileName(saveFileName);
 				fileInfoService.addFileInfo(t);
@@ -202,7 +204,7 @@ public class GiftInfoController extends LogController {
 		try {
 			for (int i = 0; i <fileInfo.size() ; i++) {
 				//下载图片
-				String img = ftpUtils.downloadBase64Img(fileInfo.get(i).getFilePath(),fileInfo.get(i).getSavefileName(),fileInfo.get(i).getFileSuffix());
+				String img = DxlFileUtil.downloadBase64Img(fileInfo.get(i).getFilePath(),fileInfo.get(i).getSavefileName(),fileInfo.get(i).getFileSuffix());
 				fileInfo.get(i).setFilePath(img);
 			}
 			result.put("fileInfo",fileInfo);

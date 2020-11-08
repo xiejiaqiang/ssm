@@ -6,4 +6,6 @@ import com.entity.po.systemManage.Log;
 public interface LogMapper extends BaseMapper<Log> {
 
 	void truncateTable();
+
+	Log selectLongLoginByUserNameLimit1(String userName);
 }

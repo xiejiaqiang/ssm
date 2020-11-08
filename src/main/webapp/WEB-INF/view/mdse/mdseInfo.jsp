@@ -10,9 +10,15 @@
 	<link rel="stylesheet" type="text/css" href="${path }/resources/css/plugins/ionRangeSlider/ion.rangeSlider.css" >
 	<link type="text/css" href="${path }/resources/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css" rel="stylesheet">
 	<link type="text/css" href="${path }/resources/css/plugins/ionRangeSlider/normalize.min.css" rel="stylesheet">
+	<link href="${path }/resources/css/plugins/fileinput/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="${path }/resources/js/plugins/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css">
 	<script src="${path }/resources/js/view/mdse/mdseInfo.js"></script>
 	<!-- IonRangeSlider -->
 	<script src="${path }/resources/js/plugins/ionRangeSlider/ion.rangeSlider.js"></script>
+	<script src="${path }/resources/js/plugins/fileinput/fileinput.js" type="text/javascript"></script>
+	<script src="${path }/resources/js/plugins/fileinput/zh.js" type="text/javascript"></script>
+	<!-- Fancy box -->
+	<script src="${path }/resources/js/plugins/fancybox/jquery.fancybox.js"  type="text/javascript"></script>
 </head>
 <body class="gray-bg">
 	<div class="panel-body">
@@ -391,75 +397,6 @@
 		</div>
 
 	</div>
-
-	<!-- 图片 -->
-
-		<div class="modal fade" id="modal_btn_mdse_Img" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modal_btn_mdse_Img">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-						<div class="ibox float-e-margins">
-							<div class="ibox-title">
-								<h5>商品图片</h5>
-								<div class="ibox-tools">
-									<a class="collapse-link">
-										<i class="fa fa-chevron-up"></i>
-									</a>
-									<a class="dropdown-toggle" data-toggle="dropdown" href="carousel.html#">
-										<i class="fa fa-wrench"></i>
-									</a>
-									<ul class="dropdown-menu dropdown-user">
-										<li><a href="#">轮播图</a>
-										</li>
-										<li><a href="#">详情页</a>
-										</li>
-									</ul>
-									<a class="close-link">
-										<i class="fa fa-times"></i>
-									</a>
-								</div>
-							</div>
-							<div class="ibox-content ">
-								<div class="carousel slide" id="carousel2">
-									<ol class="carousel-indicators">
-										<li data-slide-to="0" data-target="#carousel2" class="active"></li>
-										<li data-slide-to="1" data-target="#carousel2"></li>
-										<li data-slide-to="2" data-target="#carousel2" class=""></li>
-									</ol>
-									<div class="carousel-inner">
-										<div class="item ">
-											<img alt="image" class="img-responsive" src="${path }/resources/img/p_big1.jpg">
-											<div class="carousel-caption">
-												<p>This is simple caption 1</p>
-											</div>
-										</div>
-										<div class="item active">
-											<img alt="image" class="img-responsive" src="${path }/resources/img/p_big3.jpg">
-											<div class="carousel-caption">
-												<p>This is simple caption 2</p>
-											</div>
-										</div>
-										<div class="item">
-											<img alt="image" class="img-responsive" src="${path }/resources/img/p_big2.jpg">
-											<div class="carousel-caption">
-												<p>This is simple caption 3</p>
-											</div>
-										</div>
-									</div>
-									<a data-slide="prev" href="carousel.html#carousel2" class="left carousel-control">
-										<span class="icon-prev"></span>
-									</a>
-									<a data-slide="next" href="carousel.html#carousel2" class="right carousel-control">
-										<span class="icon-next"></span>
-									</a>
-								</div>
-							</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					</div>
-				</div>
-			</div>
-		</div>
 	<!-- 价格管理 -->
 	<div class="modal fade" id="modal_mdse_price_edit" role="dialog" aria-labelledby="modal_mdse_price_edit" aria-hidden="true">
 		<div class="modal-dialog">
@@ -583,5 +520,124 @@
 		</div>
 
 	</div>
+
+	<div class="modal fade" id="modal_spinner_wave">
+		<div class="spiner-example">
+			<div class="sk-spinner sk-spinner-wave">
+				<div class="sk-rect1"></div>
+				<div class="sk-rect2"></div>
+				<div class="sk-rect3"></div>
+				<div class="sk-rect4"></div>
+				<div class="sk-rect5"></div>
+			</div>
+		</div>
+		<div class="modal-footer hide">
+			<button type="button" class="btn btn-default" id = 'spinner_wave_close' data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+	<!-- 上传 -->
+	<form>
+		<div class="modal fade" id="modal_btn_Upload" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modal_btn_Upload">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<h4 class="modal-title" id="myModalLabel">请选择图片</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" hidden name="upload_id" id="upload_id" value="" class="file-loading" />
+						<input type="file" name="txt_file" id="txt_file" class="file-loading" multiple /><!-- multiple表示允许同时上传多个文件 -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!-- 图片 -->
+	<div class="modal fade"  id="modal_btn_gift_Img" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modal_btn_gift_Img">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="wrapper" style="height:480px">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>商品图片 <small id="mdseNameBox">http://fancybox.net/</small></h5>
+									<div class="ibox-tools">
+										<a class="collapse-link">
+											<i class="fa fa-chevron-up"></i>
+										</a>
+										<a class="dropdown-toggle" data-toggle="dropdown" href="basic_gallery.html#">
+											<i class="fa fa-wrench"></i>
+										</a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="">轮播图</a>
+											</li>
+											<li><a href="">详情页</a>
+											</li>
+										</ul>
+										<a class="close-link">
+											<i class="fa fa-times"></i>
+										</a>
+									</div>
+								</div>
+								<div class="ibox-content" id = 'imgInfo'>
+									<a class="fancybox" href="${path }/resources/img/p1.jpg" title="图片1">
+										<img alt="image" src="${path }/resources/img/p_big1.jpg" />
+									</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--批量同步销售渠道 -->
+	<div class="modal fade" id="modal_mdse_Sales_Batch" role="dialog" aria-labelledby="modal_mdse_Sales_Batch" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+						<table style="border-collapse:separate; border-spacing:0px 10px;">
+							<tr>
+								<td>销售渠道：</td>
+								<td>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="1" id="inlineCheckbox1" name="sales_channel_type">天猫</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="2" id="inlineCheckbox2" name="sales_channel_type">京东</label>
+									    <label class="checkbox-inline">
+											<input type="checkbox" value="3" id="inlineCheckbox3" name="sales_channel_type">淘宝</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="4" id="inlineCheckbox4" name="sales_channel_type">拼多多</label>
+								</td>
+							</tr>
+						</table>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"  id="submit_form_Sales_Batch_btn">同步</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<script>
+		$(document).ready(function () {
+			$('.fancybox').fancybox({
+				openEffect: 'none',
+				closeEffect: 'none'
+			});
+		});
+	</script>
 </body>
 </html>

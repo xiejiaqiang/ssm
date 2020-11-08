@@ -20,4 +20,7 @@ public interface OrderInfoMapper extends BaseMapper<TOrderInfo> {
     Integer orderInfoCount();
 
     List<TOrderInfo> selectOrderInfo(Integer size);
+
+    List<TOrderInfo> selectOrderInfoGroupMdseNo();
+
 }

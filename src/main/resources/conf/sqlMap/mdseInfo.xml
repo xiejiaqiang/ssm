@@ -19,7 +19,7 @@
     <result column="brand" jdbcType="VARCHAR" property="brand" />
     <result column="series" jdbcType="VARCHAR" property="series" />
     <result column="sellingPoint" jdbcType="VARCHAR" property="sellingPoint" />
-    <result column="pictureId" jdbcType="BIGINT" property="pictureId" />
+    <result column="pictureId" jdbcType="VARCHAR" property="pictureId" />
     <result column="parameter1" jdbcType="VARCHAR" property="parameter1" />
     <result column="parameter2" jdbcType="VARCHAR" property="parameter2" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />

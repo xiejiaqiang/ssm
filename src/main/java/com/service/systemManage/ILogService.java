@@ -17,4 +17,6 @@ public interface ILogService {
 	public void truncateLog() throws Exception;
 
 	public List<Log> sortQueryLog(String sortName, String sort, Log log);
+
+	public Log queryLoginByUserNameLimit1(String userName);
 }

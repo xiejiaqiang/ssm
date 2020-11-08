@@ -103,6 +103,10 @@
   </select>
 
 
+  <select id="selectOrderInfoGroupMdseNo" resultMap="BaseResultMap">
+    SELECT COUNT(mdseNo) AS remarks, mdseNo,SUM(orderAmount) AS orderAmount FROM t_order_info GROUP BY mdseNo ORDER BY orderAmount DESC
+  </select>
+
   <sql id="Example_Where_Clause">
     <!--
       WARNING - @mbg.generated

@@ -3,18 +3,19 @@ package com.util;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class FtpUtils {
     //ftp服务器地址
-
+    static Logger LOGGER = LoggerFactory.getLogger(FtpUtils.class);
     public String hostname;
     //ftp服务器端口号默认为21
     public Integer port;
@@ -38,7 +39,7 @@ public class FtpUtils {
                 password = properties.getProperty("password");
 
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("加载properties配置失败[{}]",e);
             }
 
     }
@@ -48,20 +49,21 @@ public class FtpUtils {
     public void initFtpClient() {
         ftpClient = new FTPClient();
         ftpClient.setBufferSize(32*1024*1024);
+        ftpClient.enterLocalPassiveMode();
         ftpClient.setControlEncoding("utf-8");
         try {
-            System.out.println("connecting...ftp服务器:"+this.hostname+":"+this.port);
+            LOGGER.info("connecting...ftp服务器:"+this.hostname+":"+this.port);
             ftpClient.connect(hostname, port); //连接ftp服务器
             ftpClient.login(username, password); //登录ftp服务器
             int replyCode = ftpClient.getReplyCode(); //是否成功登录服务器
             if(!FTPReply.isPositiveCompletion(replyCode)){
-                System.out.println("connect failed...ftp服务器:"+this.hostname+":"+this.port);
+                LOGGER.info("connect failed...ftp服务器:"+this.hostname+":"+this.port);
             }
-            System.out.println("connect successfu...ftp服务器:"+this.hostname+":"+this.port);
+            LOGGER.info("connect successfu...ftp服务器:"+this.hostname+":"+this.port);
         }catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOGGER.error("连接ftp失败[{}]",e);
         }catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("连接ftp失败[{}]",e);
         }
     }
 
@@ -76,7 +78,7 @@ public class FtpUtils {
         boolean flag = false;
         InputStream inputStream = null;
         try{
-            System.out.println("开始上传文件");
+            LOGGER.info("开始上传文件");
             inputStream = new FileInputStream(new File(originfilename));
             initFtpClient();
             ftpClient.setFileType(ftpClient.BINARY_FILE_TYPE);
@@ -87,10 +89,9 @@ public class FtpUtils {
             inputStream.close();
             ftpClient.logout();
             flag = true;
-            System.out.println("上传文件成功");
+            LOGGER.info("上传文件成功");
         }catch (Exception e) {
-            System.out.println("上传文件失败");
-            e.printStackTrace();
+            LOGGER.error("上传文件失败[{}]",e);
         }finally{
             if(ftpClient.isConnected()){
                 try{
@@ -119,19 +120,24 @@ public class FtpUtils {
     public  boolean uploadFile(String pathname, String fileName, InputStream inputStream){
         boolean flag = false;
         try{
-            System.out.println("开始上传文件");
+            LOGGER.info("开始上传文件");
             initFtpClient();
             ftpClient.setFileType(ftpClient.BINARY_FILE_TYPE);
             CreateDirecroty(pathname);
-            ftpClient.makeDirectory(pathname);
-            ftpClient.changeWorkingDirectory(pathname);
-            ftpClient.storeFile(fileName, inputStream);
+            boolean makeDirectory = ftpClient.makeDirectory(pathname);
+            LOGGER.info("makeDirectory"+makeDirectory);
+            boolean changeWorkingDirectory = ftpClient.changeWorkingDirectory(pathname);
+            LOGGER.info("changeWorkingDirectory"+changeWorkingDirectory);
+            BufferedInputStream in = new BufferedInputStream(inputStream);
+            boolean storeFile = ftpClient.storeFile(pathname+"/"+fileName, in);
+            LOGGER.info("storeFile"+storeFile);
             inputStream.close();
+            in.close();
             ftpClient.logout();
             flag = true;
-            System.out.println("上传文件成功");
+            LOGGER.info("上传文件成功");
         }catch (Exception e) {
-            System.out.println("上传文件失败");
+            LOGGER.error("上传文件失败[{}]",e);
             e.printStackTrace();
         }finally{
             if(ftpClient.isConnected()){
@@ -157,10 +163,10 @@ public class FtpUtils {
         try {
             flag = ftpClient.changeWorkingDirectory(directory);
             if (flag) {
-                System.out.println("进入文件夹" + directory + " 成功！");
+                LOGGER.info("进入文件夹" + directory + " 成功！");
 
             } else {
-                System.out.println("进入文件夹" + directory + " 失败！开始创建文件夹");
+                LOGGER.info("进入文件夹" + directory + " 失败！开始创建文件夹");
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -191,7 +197,7 @@ public class FtpUtils {
                     if (makeDirectory(subDirectory)) {
                         changeWorkingDirectory(subDirectory);
                     } else {
-                        System.out.println("创建目录[" + subDirectory + "]失败");
+                        LOGGER.info("创建目录[" + subDirectory + "]失败");
                         changeWorkingDirectory(subDirectory);
                     }
                 } else {
@@ -225,10 +231,10 @@ public class FtpUtils {
         try {
             flag = ftpClient.makeDirectory(dir);
             if (flag) {
-                System.out.println("创建文件夹" + dir + " 成功！");
+                LOGGER.info("创建文件夹" + dir + " 成功！");
 
             } else {
-                System.out.println("创建文件夹" + dir + " 失败！");
+                LOGGER.info("创建文件夹" + dir + " 失败！");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,7 +251,7 @@ public class FtpUtils {
         boolean flag = false;
         OutputStream os=null;
         try {
-            System.out.println("开始下载文件");
+            LOGGER.info("开始下载文件");
             initFtpClient();
             //切换FTP目录
             ftpClient.changeWorkingDirectory(pathname);
@@ -260,9 +266,9 @@ public class FtpUtils {
             }
             ftpClient.logout();
             flag = true;
-            System.out.println("下载文件成功");
+            LOGGER.info("下载文件成功");
         } catch (Exception e) {
-            System.out.println("下载文件失败");
+            LOGGER.error("下载文件失败[{}]",e);
             e.printStackTrace();
         } finally{
             if(ftpClient.isConnected()){
@@ -287,7 +293,7 @@ public class FtpUtils {
         InputStream inputStream = null;
         String re=null;
         try {
-            System.out.println("开始下载文件");
+            LOGGER.info("开始下载文件");
             initFtpClient();
             //切换FTP目录
             ftpClient.changeWorkingDirectory(pathname);
@@ -303,9 +309,9 @@ public class FtpUtils {
                 re = convertImageStreamToByte(inputStream, suffix);
             }
             ftpClient.logout();
-            System.out.println("下载文件成功");
+            LOGGER.info("下载文件成功");
         } catch (Exception e) {
-            System.out.println("下载文件失败");
+            LOGGER.error("下载文件失败[{}]",e);
             e.printStackTrace();
         } finally{
             if(ftpClient.isConnected()){
@@ -342,9 +348,9 @@ public class FtpUtils {
             ImageIO.write(bi, format == null ? "jpg" : format, baos);
             byte[] bytes = baos.toByteArray();
             result = encoder.encodeBuffer(bytes).trim();
-            System.out.println("将图片流转换为BASE64加密字符串成功！");
+            LOGGER.info("将图片流转换为BASE64加密字符串成功！");
         } catch (IOException e) {
-            System.out.println("将图片流转换为 BASE64加密字符串失败: " + e);
+            LOGGER.error("将图片流转换为 BASE64加密字符串失败: " + e);
         } finally {
             try {
                 if(baos != null) {
@@ -352,7 +358,7 @@ public class FtpUtils {
                     baos = null;
                 }
             } catch (Exception e) {
-                System.out.println("关闭文件流发生异常: " + e);
+                LOGGER.error("关闭文件流发生异常: " + e);
             }
         }
         return result;
@@ -364,17 +370,16 @@ public class FtpUtils {
     public boolean deleteFile(String pathname, String filename){
         boolean flag = false;
         try {
-            System.out.println("开始删除文件");
+            LOGGER.info("开始删除文件");
             initFtpClient();
             //切换FTP目录
             ftpClient.changeWorkingDirectory(pathname);
             ftpClient.dele(filename);
             ftpClient.logout();
             flag = true;
-            System.out.println("删除文件成功");
+            LOGGER.info("删除文件成功");
         } catch (Exception e) {
-            System.out.println("删除文件失败");
-            e.printStackTrace();
+            LOGGER.error("删除文件失败");
         } finally {
             if(ftpClient.isConnected()){
                 try{
@@ -392,6 +397,6 @@ public class FtpUtils {
         //ftp.uploadFile("ftpFile/data", "123.docx", "E://123.docx");
         //ftp.downloadFile("ftpFile/data", "123.docx", "F://");
         ftp.deleteFile("ftpFile/data", "123.docx");
-        System.out.println("ok");
+        LOGGER.info("ok");
     }
 }

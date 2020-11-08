@@ -103,6 +103,11 @@ public class LogServiceImpl implements ILogService {
 		return logs;
 	}
 
+	@Override
+	public Log queryLoginByUserNameLimit1(String userName) {
+		return logMapper.selectLongLoginByUserNameLimit1(userName);
+	}
+
 	public List<Log> findLog(Log log) {
 		return logMapper.select(log);
 	};

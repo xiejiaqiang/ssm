@@ -956,52 +956,52 @@ public class TMdseInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andPictureidEqualTo(Long value) {
+        public Criteria andPictureidEqualTo(String value) {
             addCriterion("pictureId =", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidNotEqualTo(Long value) {
+        public Criteria andPictureidNotEqualTo(String value) {
             addCriterion("pictureId <>", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidGreaterThan(Long value) {
+        public Criteria andPictureidGreaterThan(String value) {
             addCriterion("pictureId >", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidGreaterThanOrEqualTo(Long value) {
+        public Criteria andPictureidGreaterThanOrEqualTo(String value) {
             addCriterion("pictureId >=", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidLessThan(Long value) {
+        public Criteria andPictureidLessThan(String value) {
             addCriterion("pictureId <", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidLessThanOrEqualTo(Long value) {
+        public Criteria andPictureidLessThanOrEqualTo(String value) {
             addCriterion("pictureId <=", value, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidIn(List<Long> values) {
+        public Criteria andPictureidIn(List<String> values) {
             addCriterion("pictureId in", values, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidNotIn(List<Long> values) {
+        public Criteria andNotIn(List<String> values) {
             addCriterion("pictureId not in", values, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidBetween(Long value1, Long value2) {
+        public Criteria andPictureidBetween(String value1, String value2) {
             addCriterion("pictureId between", value1, value2, "pictureid");
             return (Criteria) this;
         }
 
-        public Criteria andPictureidNotBetween(Long value1, Long value2) {
+        public Criteria andPictureidNotBetween(String value1, String value2) {
             addCriterion("pictureId not between", value1, value2, "pictureid");
             return (Criteria) this;
         }

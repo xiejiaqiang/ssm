@@ -108,7 +108,11 @@
 									class="form-control" name="top-search" id="top-search">
 							</div>
 							<!-- 用户是否由登录界面进入判断 -->
-								<input type="hidden" class="form-control" value="${loginFlag}"  id="loginFlag">
+							<input type="hidden" class="form-control" value="${loginFlag}"  id="loginFlag">
+							<!-- 上次登录时间 -->
+							<input type="hidden" class="form-control" value="${loginTime}"  id="loginTime">
+						<%--	<input type="hidden" class="form-control" value="${currentUser.username}"  id="userName">--%>
+
 						</form>
 					</div>
 					<ul class="nav navbar-top-links navbar-right">

@@ -52,7 +52,7 @@
 						<option value="0">待上架</option>
 						<option value="1">已上架</option>
 						<option value="2">已售罄</option>
-						<option value="3">-已下架</option>
+						<option value="3">已下架</option>
 					</select>
 				</div>
 			</div>

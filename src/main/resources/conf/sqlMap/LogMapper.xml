@@ -18,4 +18,16 @@
   <update id="truncateTable">
   	truncate table log
   </update>
+
+  <select id="selectLongLoginByUserNameLimit1" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from log
+    WHERE userName = #{userName,jdbcType=VARCHAR}
+    ORDER BY createTime DESC LIMIT 1
+  </select>
+
+  <sql id="Base_Column_List">
+    logId, userName, createTime, content, `operation`, ip, `module`
+  </sql>
 </mapper>

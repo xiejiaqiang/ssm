@@ -91,14 +91,25 @@ public class MdseSalesController extends LogController {
 				if(id == null){
 					result.put("success", false);
 					result.put("errorMsg", "新增失败,该销售渠道已有对应商品,不可重复增加");
+					WriterUtil.write(response, result.toString());
+					return;
 				}else {
-					if (id != list.get(0).getId()){
+					if (!id.equals(list.get(0).getId())){
 						result.put("success", false);
 						result.put("errorMsg", "更新失败,该销售渠道已有对应商品,不可重复增加");
+						WriterUtil.write(response, result.toString());
+						return;
 					}
 				}
 			}
-
+			//判断地址
+			if(StringUtil.isNotEmpty(mdseSales.getMdseUrl())){
+				if(mdseSales.getMdseUrl().contains("http://")){
+					mdseSales.setMdseUrl(mdseSales.getMdseUrl().substring(7));
+				}else if(mdseSales.getMdseUrl().contains("https://")){
+					mdseSales.setMdseUrl(mdseSales.getMdseUrl().substring(8));
+				}
+			}
 			if (id != null) {   // Id不为空 说明是修改
 				int status = mdseSalesService.updateMdseSales(mdseSales);
 					result.put("success", true);

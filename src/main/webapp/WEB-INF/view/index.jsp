@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@ include file="/WEB-INF/common.jsp"%>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+    <!--引入样式表-->
 </head>
 
 <body class="gray-bg">
@@ -151,7 +152,7 @@
                         <div class="feed-element">
                             <div>
                                 <small class="pull-right text-navy">1月前</small>
-                                <strong>井幽幽</strong>
+                                <strong>养猪的大侠</strong>
                                 <div>有人说：“一辈子很长，要跟一个有趣的人在一起”。我想关注我的人，应该是那种喜欢找乐子也乐意分享乐趣的人，你们一定挺优秀的。所以单身的应该在这条留言，互相勾搭一下。特别有钱人又帅可以直接私信我！</div>
                                 <small class="text-muted">4月11日 00:00</small>
                             </div>
@@ -160,8 +161,8 @@
                         <div class="feed-element">
                             <div>
                                 <small class="pull-right">2月前</small>
-                                <strong>马伯庸 </strong>
-                                <div>又方便，又防水，手感又好，还可以用手机遥控。简直是拍戏利器，由其是跟老师们搭戏的时候…想想还有点小激动啊，嘿嘿。</div>
+                                <strong>一只知之 </strong>
+                                <div>如果您在使用中有任何问题欢迎随时联系我。</div>
                                 <small class="text-muted">11月8日 20:08 </small>
                             </div>
                         </div>
@@ -188,7 +189,7 @@
                         <div class="feed-element">
                             <div>
                                 <small class="pull-right">5月前</small>
-                                <strong>老刀99</strong>
+                                <strong>小豆包</strong>
                                 <div>昨天评论里你见过最“温暖和感人”的诗句，整理其中经典100首，值得你收下学习。</div>
                                 <small class="text-muted">11月8日 20:08 </small>
                             </div>
@@ -205,7 +206,7 @@
                             <div>
                                 <small class="pull-right">5月前</small>
                                 <strong>DMG电影 </strong>
-                                <div>《和外国男票乘地铁，被中国大妈骂不要脸》妹子实在委屈到不行，中国妹子找外国男友很令人不能接受吗？大家都来说说自己的看法</div>
+                                <div>希望大家有好的电影可以推荐一下，来打发我无聊的时间啊</div>
                                 <small class="text-muted">11月8日 20:08 </small>
                             </div>
                         </div>
@@ -218,10 +219,10 @@
         <div class="col-sm-8">
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>用户项目列表</h5>
+                            <h5>最新订单信息</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -232,12 +233,12 @@
                             </div>
                         </div>
                         <div class="ibox-content">
-                            <table class="table table-hover no-margins">
-                                <thead>
+                            <table class="table-no-bordered" id = 'table_orderInfo'>
+                         <%--       <thead>
                                 <tr>
                                     <th>状态</th>
                                     <th>日期</th>
-                                    <th>用户</th>
+                                    <th>客户姓名</th>
                                     <th>值</th>
                                 </tr>
                                 </thead>
@@ -291,71 +292,18 @@
                                     <td>范范范二妮</td>
                                     <td class="text-navy"> <i class="fa fa-level-up"></i> 23%</td>
                                 </tr>
-                                </tbody>
+                                </tbody>--%>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>任务列表</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <ul class="todo-list m-t small-list ui-sortable">
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                    <span class="m-l-xs todo-completed">开会</span>
 
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                    <span class="m-l-xs  todo-completed">项目开发</span>
-
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">修改bug</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1小时</small>
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">修改bug</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1小时</small>
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">修改bug</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1小时</small>
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">修改bug</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1小时</small>
-                                </li>
-                                <li>
-                                    <a href="widgets.html#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                    <span class="m-l-xs">修改bug</span>
-                                    <small class="label label-primary"><i class="fa fa-clock-o"></i> 1小时</small>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>交易地区</h5>
+                            <h5>洗衣机交易地区</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -369,29 +317,7 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <table class="table table-hover margin bottom">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 1%" class="text-center">序号</th>
-                                            <th>交易</th>
-                                            <th class="text-center">日期</th>
-                                            <th class="text-center">销售额</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${orderInfos}" var="oi"  varStatus="oiLength">
-                                            <tr>
-                                                <td class="text-center"> ${oiLength.count }</td>
-                                                <td>${oi.mdseNo } </td>
-                                                <td class="text-center small">
-
-                                                    <fmt:formatDate pattern="yyyy-MM-dd"  value="${oi.orderDate}"/>
-                                                </td>
-                                                <td class="text-center"><span class="label label-primary">&yen;${oi.orderAmount }</span>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
+                                    <table class="table-no-bordered" id = 'table_orderInfo2'>
                                     </table>
                                 </div>
                                 <div class="col-sm-6">
@@ -404,11 +330,13 @@
             </div>
 
         </div>
-
-
     </div>
 </div>
-
+<style>
+   /* #table_orderInfo {border-left: 0px; border-right:0px}
+    #table_orderInfo th{border-left: 0px; border-right: 0px}
+    #table_orderInfo td{border-left: 0px; border-right: 0px}*/
+</style>
 
 
 <!-- Flot -->
@@ -427,8 +355,10 @@
 <script src="${path }/resources/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
 <!-- Jvectormap -->
-<script src="${path }/resources/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="${path }/resources/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<link href="${path }/resources/js/plugins/jvectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" media="screen">
+<script src="${path }/resources/js/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="${path }/resources/js/plugins/jvectormap/jquery-jvectormap-cn-mill.js"></script>
+
 
 <!-- EayPIE -->
 <script src="${path }/resources/js/plugins/easypiechart/jquery.easypiechart.js"></script>

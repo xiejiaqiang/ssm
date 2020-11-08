@@ -178,29 +178,6 @@ var FileInput = function () {
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
             msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
         });
-        //异步上传处理错误和返回结果要处理fileerror和fileuploaded方法；同步上传处理错误和返回结果filebatchuploaderror和filebatchuploadsuccess方法
-        //导入文件上传完成之后的事件
-        /*$("#txt_file").on("fileuploaded", function (event, data, previewId, index) {
-            $(".fileinput-remove-button").click()
-            $("#modal_btn_Upload").modal("hide");
-            var success = data.response.success;
-            var errorMsg = data.response.errorMsg;
-            if (success == false) {
-                layerAlert(errorMsg, 2)
-                return;
-            }else{
-                    swal({
-                        title: "上传成功",
-                        text: "图片已全部上传成功",
-                        type: "success"
-                    });
-                $("#btn_search").click();
-            }
-
-            //1.初始化表格
-            var oTable = new TableInit();
-            oTable.Init(data);
-        });*/
 
         //同步上传返回结果处理
         $("#txt_file").on("filebatchuploadsuccess", function (event, data, previewId, index) {
@@ -281,13 +258,12 @@ var ButtonInit = function () {
         });
         $("#btn_import").click(function(){
             var getSelections = $('#table_giftInfo').bootstrapTable('getSelections');
+            if(getSelections && getSelections.length==1){
             $("#upload_id").val(getSelections[0].id);
-
-            if(getSelections && getSelections.length>0){
             $('#modal_btn_Upload').modal({backdrop: 'static', keyboard: false});
             $('#modal_btn_Upload').modal('show');
             }else{
-                parent.layer.msg('请选择数据');
+                parent.layer.msg('请选择一数据');
             }
         });
         $('#modal_btn_gift_Img').on('hidden.bs.modal', function () {
@@ -334,6 +310,7 @@ function delUser(){
 };
 
 function viewGiftImg(value){
+    $('#table_giftInfo').bootstrapTable("refresh")
     $('#modal_spinner_wave').modal('show');
     $.ajax({
         url:"viewImg.htm",
@@ -344,6 +321,11 @@ function viewGiftImg(value){
             if(res.success){
                 var imgInfo = res.fileInfo;
                var dev='';
+               if(imgInfo.length == 0){
+                   parent.layer.msg('暂无图片');
+                   $('#spinner_wave_close').click();
+                   return
+               }
                 for (var i = 0; i <imgInfo.length ; i++) {
                     if(i==0){
                         dev = dev+"<div class='item active'> <img alt='image' class='img-responsive' src='data:image/png;base64,"+imgInfo[i].filePath+"'> <div class='carousel-caption'> <p>"+imgInfo[i].fileName+"</p> </div> </div>";

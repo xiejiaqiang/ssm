@@ -50,4 +50,7 @@ public interface IOrderInfoService {
 
 	// 查询最新交易的n条数据
 	public List<TOrderInfo> orderInfo(int size) throws Exception;
+
+	//根据商品编号统计订单
+	public List<TOrderInfo> selectOrderInfoGroupMdseNo() throws Exception;
 }

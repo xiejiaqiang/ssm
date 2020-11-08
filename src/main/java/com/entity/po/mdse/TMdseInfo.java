@@ -88,7 +88,7 @@ public class TMdseInfo implements Serializable {
      * 图片ID
      */
     @Column(name = "pictureId")
-    private Long pictureId;
+    private String pictureId;
 
     /**
      * 参数1
@@ -254,11 +254,11 @@ public class TMdseInfo implements Serializable {
         this.sellingPoint = sellingPoint;
     }
 
-    public Long getPictureId() {
+    public String getPictureId() {
         return pictureId;
     }
 
-    public void setPictureId(Long pictureId) {
+    public void setPictureId(String pictureId) {
         this.pictureId = pictureId;
     }
 

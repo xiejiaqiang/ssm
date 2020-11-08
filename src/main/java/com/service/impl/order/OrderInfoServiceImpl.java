@@ -202,7 +202,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 	private  TOrderInfo setOrderInfoXSSFRow(XSSFRow row){
 		row.getCell(0).setCellType(CellType.STRING);
-		String orderNo = row.getCell(0).getReference();
+		String orderNo = row.getCell(0).getStringCellValue();
 		row.getCell(1).setCellType(CellType.STRING);
 		String mdseNo = row.getCell(1).getStringCellValue();
 		row.getCell(2).setCellType(CellType.STRING);
@@ -479,6 +479,11 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	@Override
 	public List<TOrderInfo> orderInfo(int size) throws Exception {
 		return orderInfoMapper.selectOrderInfo(size);
+	}
+
+	@Override
+	public List<TOrderInfo> selectOrderInfoGroupMdseNo() throws Exception {
+		return orderInfoMapper.selectOrderInfoGroupMdseNo();
 	};
 
 }

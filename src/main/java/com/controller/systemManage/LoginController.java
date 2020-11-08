@@ -106,7 +106,7 @@ public class LoginController {
 				Log log = new Log();
 				log.setUsername(userName);
 				log.setCreatetime(new Date());
-				log.setIp(IpUtil.getIpAddr(request));
+				log.setIp(IpUtil.getIpAddr2(request));
 				log.setOperation("登录");
 				log.setModule(ModuleTypeCode.LOGIN_LOG_CODE.getCode());
 				log.setContent("管理员登录操作");
@@ -119,6 +119,11 @@ public class LoginController {
 				session.setAttribute("currentOperationIds", role.getOperationids());  // 当前用户所拥有的按钮权限
 				//用户是不是登录判断
 				session.setAttribute("loginFlag",true);
+				//获取登录信息
+				Log log2 = logService.queryLoginByUserNameLimit1(userName);
+				session.setAttribute("loginTime",DateUtil.formatTime(log2.getCreatetime(),"yyyy-MM-dd HH:mm:ss"));
+
+
 				setData(session);
 				// 勾选了两周内自动登录。
 				if ("on".equals(auto)) {
@@ -170,7 +175,7 @@ public class LoginController {
 				Log log = new Log();
 				log.setUsername(user.getUsername());
 				log.setCreatetime(new Date());
-				log.setIp(IpUtil.getIpAddr(request));
+				log.setIp(IpUtil.getIpAddr2(request));
 				log.setModule(ModuleTypeCode.LOGIN_LOG_CODE.getCode());
 				log.setContent("普通用户登录操作");
 				log.setOperation("登录");
@@ -184,6 +189,10 @@ public class LoginController {
 				session.setAttribute("currentOperationIds", role.getOperationids());  // 当前用户所拥有的按钮权限
 				//用户是不是登录判断
 				session.setAttribute("loginFlag",true);
+				//获取登录信息
+				Log log2 = logService.queryLoginByUserNameLimit1(user.getUsername());
+				session.setAttribute("loginTime",DateUtil.formatTime(log2.getCreatetime(),"yyyy-MM-dd HH:mm:ss"));
+
 				//首页参数
 				setData(session);
 				pageVO.getMap().put(MmsConstats.DATA, true);
@@ -206,9 +215,6 @@ public class LoginController {
 			//总订单条数
 			int orderInfoCount = orderInfoService.orderInfoCount();
 			session.setAttribute("orderInfoCount",orderInfoCount);
-			//前六订单
-			List<TOrderInfo> orderInfos = orderInfoService.orderInfo(6);
-			session.setAttribute("orderInfos",orderInfos);
 			//总商品数
 			TMdseInfo t = new TMdseInfo();
 			t.setMdseStatus("1");
@@ -431,6 +437,11 @@ public class LoginController {
 							session.setAttribute("currentOperationIds", role.getOperationids());  // 当前用户所拥有的按钮权限
 						  //用户是不是登录判断
 						  session.setAttribute("loginFlag",true);
+						  //获取登录信息
+						  Log log2 = logService.queryLoginByUserNameLimit1(currentUser.getUsername());
+						  session.setAttribute("loginTime",DateUtil.formatTime(log2.getCreatetime(),"yyyy-MM-dd HH:mm:ss"));
+
+
 						  // 跳转到主界面
 							response.sendRedirect("main.htm");
 							return;
