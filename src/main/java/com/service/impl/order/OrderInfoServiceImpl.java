@@ -469,7 +469,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 			startTime = DateUtil.ParseTime(start, "yyyy-MM-dd");
 		}
 		if(com.util.StringUtil.isNotEmpty(end)){
-			endTime = DateUtil.ParseTime(end, "yyyy-MM-dd");
+			endTime = DateUtil.ParseTime(end +" 23:59:59", "yyyy-MM-dd HH:mm:ss");
 		}
 		criteria.andOrderdateBetween(startTime, endTime);
 		List<TOrderInfo> list = orderInfoMapper.selectOrderInfoByDate(example);

@@ -76,7 +76,6 @@
 				<button class="btn btn-primary" id="btn_search" type="button">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
 				</button>
-			</button>
 		</form>
 		</div>
         <table id="table_orderInfo"></table>

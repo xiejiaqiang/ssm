@@ -68,6 +68,11 @@ $(function() {
                         size: 80
                     });
                     var dataAmount =[];
+                    var dataOrderSize =[];
+                    if(orderData ==''){
+                        dataAmount[0] = [[Date.parse(new Date()),'0']];
+                        dataOrderSize[0] = [[Date.parse(new Date()),'0']];
+                    }else {
                     var dataAmountInfoList =[];
                     for (var i=0;i<orderData.length;i++){
                         var dataAmountInfo = [];
@@ -76,8 +81,6 @@ $(function() {
                         dataAmountInfoList[i]=  dataAmountInfo;
                     }
                     dataAmount[0] = dataAmountInfoList;
-
-                    var dataOrderSize =[];
                     var dataOrderSizeInfoList =[];
                     for (var i=0;i<orderData.length;i++){
                         var dataOrderSizeInfo = [];
@@ -86,7 +89,7 @@ $(function() {
                         dataOrderSizeInfoList[i]=  dataOrderSizeInfo;
                     }
                     dataOrderSize[0] = dataOrderSizeInfoList;
-
+                    }
                     var dataset = [
                         {
                             label: "订单金额",
@@ -461,8 +464,8 @@ $(function() {
                 start: $("#txt_search_start").val(),
                 end: $("#txt_search_end").val(),
                 search:params.search,
-                order: params.order,
-                ordername: params.sort
+                order: 'desc',
+                ordername: 'orderDate'
             };
             return temp;
         };
