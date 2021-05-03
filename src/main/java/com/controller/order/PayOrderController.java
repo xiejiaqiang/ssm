@@ -7,6 +7,7 @@ import com.controller.systemManage.LogController;
 import com.entity.po.mdse.TMdseInfo;
 import com.entity.po.order.TOrderInfo;
 import com.entity.po.systemManage.Operation;
+import com.entity.vo.AddressInfo;
 import com.entity.vo.BathInsertResultVO;
 import com.github.pagehelper.PageInfo;
 import com.service.impl.systemManage.OperationServiceImpl;
@@ -16,6 +17,7 @@ import com.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -76,12 +78,12 @@ public class PayOrderController extends LogController {
 
 	@RequestMapping("batchImport")
 	@ResponseBody
-	public JSONObject batchImport(@RequestParam MultipartFile[] txt_file, HttpSession session ,HttpServletResponse response) throws Exception {
+	public JSONObject batchImport(@RequestParam MultipartFile[] txt_file,String type, HttpSession session ,HttpServletResponse response) throws Exception {
 		BathInsertResultVO res = new BathInsertResultVO();
 		JSONObject result = new JSONObject();
 		try {
 			LOGGER.info("batchImport 批量新增支付订单信息");
-			res = orderInfoService.bathAddOrderInfo(txt_file[0]);
+			res = orderInfoService.bathAddOrderInfo(txt_file[0],type);
 			LOGGER.info("batchImport 批量新增支付订单信息完成，新增结果:[{}]", JSON.toJSON(res));
 			result.put("success", true);
 		} catch (Exception e) {
@@ -95,12 +97,38 @@ public class PayOrderController extends LogController {
 			return result;
 		} else {
 			LOGGER.info("batchImport 批量新增支付订单信息部分成功,成功条数[],总条数", res.getSuccessSize(), res.getCountSize());
-			result.put("msg", "批量新增支付订单信息成功,成功条数" + res.getSuccessSize() + ",总条数" + res.getCountSize() + "");
+			result.put("msg", "成功条数" + res.getSuccessSize() + ",失败条数" + res.getFailSize() + ",总条数" + res.getCountSize() + "");
 			result.put("data", res.getFailInfoVoList());
 			return result;
 		}
 	}
 
+	@RequestMapping("batchImportLstcs")
+	@ResponseBody
+	public JSONObject batchImportLstcs(@RequestParam MultipartFile[] txt_file_lstcs, HttpSession session ,HttpServletResponse response) throws Exception {
+		BathInsertResultVO res = new BathInsertResultVO();
+		JSONObject result = new JSONObject();
+		try {
+			LOGGER.info("batchImportLstcs 批量新增物流信息");
+			res = orderInfoService.bathUptLstcs(txt_file_lstcs[0]);
+			LOGGER.info("batchImportLstcs 批量新增物流信息完成，新增结果:[{}]", JSON.toJSON(res));
+			result.put("success", true);
+		} catch (Exception e) {
+			LOGGER.error("batchImportLstcs 批量新增物流信息失败，失败信息:[{}]", JSON.toJSON(e.getMessage()));
+			result.put("errorMsg", "数据库操作失败");
+			result.put("success", false);
+			return result;
+		}
+		if (res.getCountSize() == res.getSuccessSize()) {
+			LOGGER.info("batchImportLstcs 批量新增物流信息全部成功！");
+			return result;
+		} else {
+			LOGGER.info("batchImportLstcs 批量新增物流信息部分成功,成功条数[],总条数", res.getSuccessSize(), res.getCountSize());
+			result.put("msg", "成功条数" + res.getSuccessSize() + ",失败条数" + res.getFailSize() + ",总条数" + res.getCountSize() + "");
+			result.put("data", res.getFailInfoVoList());
+			return result;
+		}
+	}
 
 
 	// 新增或修改
@@ -116,7 +144,15 @@ public class PayOrderController extends LogController {
 		}
 		try {
 			if (id != null) {   // Id不为空 说明是修改
-				int status = orderInfoService.updateOrderInfo(orderInfo);
+				//是否新增销售区域信息
+				boolean isUptRegion =false;
+				//根据id查询老数据
+				TOrderInfo orderInfo1 = orderInfoService.findOrderInfoById(id);
+				//原地址等于空或等于“待更新”并且新地址不为空
+				if((StringUtils.isEmpty(orderInfo1.getAddress())||"待更新".equals(orderInfo1.getAddress()))&&!StringUtils.isEmpty(orderInfo.getAddress())){
+					isUptRegion = true;
+				}
+				int status = orderInfoService.updateOrderInfo(orderInfo, isUptRegion);
 					result.put("success", true);
 				if (status == 0){
 					result.put("success", false);
@@ -131,9 +167,14 @@ public class PayOrderController extends LogController {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("保存支付订单信息错误{}",e);
-			result.put("success", true);
-			result.put("errorMsg", "对不起，操作失败");
+			if(e instanceof DuplicateKeyException){
+				LOGGER.error("新增失败，该订单已存在{}", JSON.toJSONString(e));
+				result.put("errorMsg", "新增失败!该订单已存在");
+			}else {
+				LOGGER.error("保存支付订单信息错误{}",e);
+				result.put("errorMsg", "对不起，操作失败");
+			}
+			result.put("success", false);
 		}
 		WriterUtil.write(response, result.toString());
 	}

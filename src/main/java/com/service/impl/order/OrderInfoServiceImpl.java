@@ -1,30 +1,36 @@
 package com.service.impl.order;
 
 import com.alibaba.fastjson.JSON;
+import com.constant.OrderRelatedCode;
 import com.dao.order.OrderInfoMapper;
 import com.entity.po.Example.payOrder.TOrderInfoExample;
 import com.entity.po.mdse.TMdseInfo;
 import com.entity.po.mdse.TMdseRegion;
+import com.entity.po.mdse.TMdseSales;
 import com.entity.po.order.TOrderInfo;
+import com.entity.vo.AddressInfo;
 import com.entity.vo.BathInsertResultVO;
+import com.entity.vo.order.JDSalesOrderVO;
+import com.entity.vo.order.PDDSalesOrderVO;
+import com.entity.vo.order.SalesOrderLstcsVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.service.mdse.IMdseInfoService;
 import com.service.mdse.IMdseRegionService;
+import com.service.mdse.IMdseSalesService;
 import com.service.order.IOrderInfoService;
 import com.util.AddressResolutionUtil;
 import com.util.CopyUtils;
+import com.util.CsvUtil;
 import com.util.DateUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +52,9 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	IMdseRegionService mdseRegionService;
 	@Autowired
 	IMdseInfoService mdseInfoService;
+	@Autowired
+	IMdseSalesService mdseSalesService;
+	private CsvUtil csvUtil;
 
 	// 查询所有
 	public List<TOrderInfo> findOrderInfo(TOrderInfo t) throws Exception {
@@ -58,46 +67,57 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	};
 
 	// 通过ID查询
-	public TOrderInfo findOrderInfoById(Integer id) throws Exception {
+	public TOrderInfo findOrderInfoById(Long id) throws Exception {
 		return orderInfoMapper.selectByPrimaryKey(id);
 	};
 
 	// 新增
 	public Integer addOrderInfo(TOrderInfo t) throws Exception {
-		//新增销售地区
-		//解析地址
-		List<Map<String,String>> list = AddressResolutionUtil.addressResolution(t.getAddress());
+		//
+		int sess=0;
 		try {
-			TMdseRegion mdseRegion = new TMdseRegion();
-			mdseRegion.setMdseNo(t.getMdseNo());
-			mdseRegion.setCity(list.get(0).get("city"));
-			List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(mdseRegion);
-			if(mdseRegions !=null && mdseRegions.size()>0){
-				mdseRegion = mdseRegions.get(0);
-				mdseRegion.setNumber(mdseRegion.getNumber()+Long.valueOf(t.getOrderQuantity()));
-				mdseRegionService.updateMdseRegion(mdseRegion);
-			}else {
-				mdseRegion = new TMdseRegion();
-				mdseRegion.setMdseNo(t.getMdseNo());
-				TMdseInfo mdseInfo = mdseInfoService.findMdseInfoByMdseNo(t.getMdseNo());
-				mdseRegion.setMdseCat(mdseInfo.getMdseCat());
-				//解析地址
-				mdseRegion.setProvince(AddressResolutionUtil.proinceZh(list.get(0).get("province")));
-				mdseRegion.setCity(list.get(0).get("city"));
-				mdseRegion.setArea(list.get(0).get("county"));
-				mdseRegion.setNumber(Long.valueOf(t.getOrderQuantity()));
-				mdseRegionService.addMdseRegion(mdseRegion);
-			}
+			sess = orderInfoMapper.insert(t);
 		}catch (Exception e){
-			LOGGER.error("销售地区写入数据库异常,异常信息:[{}]", e);
+			throw new Exception(e);
 		}
+		if (StringUtil.isNotEmpty(t.getAddress()) && !"待更新".equals(t.getAddress())){
+			try {
+				//解析地址
+				AddressInfo addressInfo = AddressResolutionUtil.getAddressComponent(t.getAddress());
+				TMdseRegion mdseRegion = new TMdseRegion();
+				mdseRegion.setMdseNo(t.getMdseNo());
+				mdseRegion.setCity(addressInfo.getCity());
+				List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(mdseRegion);
+				if(mdseRegions !=null && mdseRegions.size()>0){
+					mdseRegion = mdseRegions.get(0);
+					if (!mdseRegion.getArea().contains(addressInfo.getDistrict())){
+						mdseRegion.setArea(mdseRegion.getArea()+addressInfo.getDistrict()+"|");
+					}
+					mdseRegion.setNumber(mdseRegion.getNumber()+Long.valueOf(t.getOrderQuantity()));
+					mdseRegionService.updateMdseRegion(mdseRegion);
+				}else {
+					mdseRegion = new TMdseRegion();
+					mdseRegion.setMdseNo(t.getMdseNo());
+					TMdseInfo mdseInfo = mdseInfoService.findMdseInfoByMdseNo(t.getMdseNo());
+					mdseRegion.setMdseCat(mdseInfo.getMdseCat());
+					//解析地址
+					mdseRegion.setProvince(AddressResolutionUtil.proinceZh(addressInfo.getProvince()));
+					mdseRegion.setCity(addressInfo.getCity());
+					mdseRegion.setArea(addressInfo.getDistrict()+"|");
 
+					mdseRegion.setNumber(Long.valueOf(t.getOrderQuantity()));
+					mdseRegionService.addMdseRegion(mdseRegion);
+				}
+			}catch (Exception e){
+				LOGGER.error("销售地区写入数据库异常,异常信息:[{}]", e);
+			}
 
-		return orderInfoMapper.insert(t);
+		}
+		return sess;
 	}
 
 	@Override
-	public BathInsertResultVO bathAddOrderInfo(MultipartFile file) throws Exception {
+	public BathInsertResultVO bathAddOrderInfo(MultipartFile file, String orderType) throws Exception {
 		BathInsertResultVO resultVO = new BathInsertResultVO();
 		List<BathInsertResultVO.FailInfoVo> failInfoVoList = new ArrayList<BathInsertResultVO.FailInfoVo>();
 		int countSize = 0;
@@ -113,14 +133,24 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 
 		//file.getInputStream()方法  返回InputStream对象 读取文件的内容
 		InputStream ins = file.getInputStream();
-		XSSFWorkbook xssfWb = null;
-		HSSFWorkbook hssfWb = null;
-		XSSFSheet xssfs = null;
-		HSSFSheet hssfs = null;
         /*判断文件后缀
-            XSSF － 提供读写Microsoft Excel OOXML XLSX格式档案的功能。
-            HSSF － 提供读写Microsoft Excel XLS格式档案的功能。*/
-		if(suffix.equals("xlsx")){
+           */
+        if (suffix.equals("csv")){
+			csvUtil = new CsvUtil();
+        	if(OrderRelatedCode.ORDER_TYPE_2.getCode().equals(orderType)){//京东订单
+        		List<JDSalesOrderVO> orderList = csvUtil.getCsvData(file, JDSalesOrderVO.class,"GBK");
+				countSize = orderList.size();
+				orderInfoList = CopyUtils.copyList(orderList, TOrderInfo.class);
+
+			}else if(OrderRelatedCode.ORDER_TYPE_4.getCode().equals(orderType)){//拼多多订单
+				List<PDDSalesOrderVO> orderList = csvUtil.getCsvData(file, PDDSalesOrderVO.class, "UTF-8");
+				countSize = orderList.size();
+				orderInfoList = CopyUtils.copyList(orderList, TOrderInfo.class);
+			}
+		}else if(suffix.equals("xlsx")){
+        	// XSSF － 提供读写Microsoft Excel OOXML XLSX格式档案的功能。
+			XSSFWorkbook xssfWb = null;
+			XSSFSheet xssfs = null;
 			xssfWb = new XSSFWorkbook(ins);
 			//获取excel表单的sheet对象
 			xssfs = xssfWb.getSheetAt(0);
@@ -139,7 +169,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 						TOrderInfo orderInfo = setOrderInfoXSSFRow(row);
 						orderInfoList.add(orderInfo);
 					}catch (Exception e){
-						LOGGER.error("第[]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
+						LOGGER.error("第[{}]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
 						failSize++;
 						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
 						failInfoVo.setFailMsg("数据第"+line+"行导入失败");
@@ -151,6 +181,9 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 				}
 			}
 		}else{
+			//HSSF － 提供读写Microsoft Excel XLS格式档案的功能。
+			HSSFWorkbook hssfWb = null;
+			HSSFSheet hssfs = null;
 			hssfWb = new HSSFWorkbook(ins);
 			//获取excel表单的sheet对象
 			hssfs = hssfWb.getSheetAt(0);;
@@ -169,7 +202,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 						TOrderInfo orderInfo = setOrderInfoHSSF(row);
 						orderInfoList.add(orderInfo);
 					}catch (Exception e){
-						LOGGER.error("第[]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
+						LOGGER.error("第[{}]行数据获取失败,错误信息[{}]",line, JSON.toJSON(e));
 						failSize++;
 						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
 						failInfoVo.setFailMsg("数据第"+line+"行导入失败");
@@ -181,15 +214,122 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 		}
 
 		for (int i=0; i<orderInfoList.size();i++){
+			TOrderInfo order = orderInfoList.get(i);
 			try {
-				addOrderInfo(orderInfoList.get(i));
+			//无效订单无需同步
+			if(OrderRelatedCode.ORDER_STATUS_99.getCode().equals(order.getOrderStatus().replaceAll("\r|\n|\t", "")) || OrderRelatedCode.ORDER_STATUS_5.getCode().equals(order.getOrderStatus().replaceAll("\r|\n|\t", ""))){
+				LOGGER.warn("无效订单无需同步");
+				successSize = successSize +1;
+				continue;
+			}
+				if(OrderRelatedCode.ORDER_TYPE_2.getCode().equals(orderType)){//京东订单
+					List<TMdseSales> list = mdseSalesService.findMdseSalesByMdseUrl(order.getMdseNo().replaceAll("\r|\n|\t", ""));
+					String mdseNo = null;
+					if(list != null || list.size() == 1){
+						mdseNo = list.get(0).getMdseNo();
+					}
+					order.setMdseNo(mdseNo);
+				}else if(OrderRelatedCode.ORDER_TYPE_4.getCode().equals(orderType)){//拼多多订单
+					TMdseSales t = new TMdseSales();
+					t.setPlatformId(order.getMdseNo().replaceAll("\r|\n|\t", ""));
+					List<TMdseSales> list = mdseSalesService.findMdseSales(t);
+					String mdseNo = null;
+					if(list == null && list.size() == 0){
+						failSize = failSize+1;
+						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+						failInfoVo.setFailMsg("商品信息不存在");
+						failInfoVo.setOrderNo(order.getOrderNo());
+						failInfoVoList.add(failInfoVo);
+						continue;
+					}
+					mdseNo = list.get(0).getMdseNo();
+					order.setMdseNo(mdseNo);
+					order.setCustName("待更新");
+					order.setNumberNo("待更新");
+					order.setAddress("待更新");
+				}
+				addOrderInfo(order);
 				successSize = successSize +1;
 			}catch (Exception e){
-				LOGGER.error("新增失败{}", JSON.toJSONString(e));
 				failSize = failSize+1;
 				BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
-				failInfoVo.setFailMsg("数据库操作失败");
-				failInfoVo.setOrderNo(orderInfoList.get(i).getOrderNo());
+				if(e instanceof DuplicateKeyException ||e.getMessage().contains("unix_index")){
+					LOGGER.error("新增失败，该订单已存在{}", JSON.toJSONString(e));
+					failInfoVo.setFailMsg("该订单已存在");
+				}else {
+					LOGGER.error("新增失败{}", JSON.toJSONString(e));
+					failInfoVo.setFailMsg("数据库操作失败");
+				}
+				failInfoVo.setOrderNo(order.getOrderNo());
+				failInfoVoList.add(failInfoVo);
+			}
+		}
+		resultVO.setCountSize(countSize);
+		resultVO.setFailSize(failSize);
+		resultVO.setSuccessSize(successSize);
+		resultVO.setFailInfoVoList(failInfoVoList);
+		return resultVO;
+	}
+
+	@Override
+	public BathInsertResultVO bathUptLstcs(MultipartFile file) throws Exception {
+		BathInsertResultVO resultVO = new BathInsertResultVO();
+		List<BathInsertResultVO.FailInfoVo> failInfoVoList = new ArrayList<BathInsertResultVO.FailInfoVo>();
+		int countSize = 0;
+		int successSize = 0;
+		int failSize =0;
+		int result = 0;
+		List<SalesOrderLstcsVO> orderLstcsList = new ArrayList<SalesOrderLstcsVO>();
+		//file.getOriginalFilename()方法 得到上传时的文件名
+		String fileName = file.getOriginalFilename();
+		//截取文件名的后缀
+		String suffix = fileName.substring(fileName.lastIndexOf(".")+1);
+
+		//file.getInputStream()方法  返回InputStream对象 读取文件的内容
+		InputStream ins = file.getInputStream();
+		/*判断文件后缀
+		 */
+		if (suffix.equals("csv")){
+			csvUtil = new CsvUtil();
+				orderLstcsList = csvUtil.getCsvData(file, SalesOrderLstcsVO.class, "GBK");
+				countSize = orderLstcsList.size();
+		}
+		for (int i=0; i<orderLstcsList.size();i++){
+			try {
+				if(StringUtil.isEmpty(orderLstcsList.get(i).getOrderNo())){
+					failSize = failSize+1;
+					BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+					LOGGER.error("第{}行订单号不存在",i+2);
+					failInfoVo.setFailMsg("第"+i+2+"行订单号不存在");
+					failInfoVo.setOrderNo(orderLstcsList.get(i).getOrderNo());
+					failInfoVoList.add(failInfoVo);
+					continue;
+				}
+				//查询订单
+				TOrderInfo orderInfo = new TOrderInfo();
+				orderInfo.setOrderNo(orderLstcsList.get(i).getOrderNo());
+				orderInfo.setOrderChannel(orderLstcsList.get(i).getOrderChannel());
+				List<TOrderInfo> orderInfos = findOrderInfo(orderInfo);
+					if(orderInfos == null || orderInfos.size() == 0){
+						failSize = failSize+1;
+						BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+						LOGGER.error("订单不存在[{}],[{}]", orderLstcsList.get(i).getOrderChannel(), orderLstcsList.get(i).getOrderNo());
+						failInfoVo.setFailMsg("订单不存在");
+						failInfoVo.setOrderNo(orderLstcsList.get(i).getOrderNo());
+						failInfoVoList.add(failInfoVo);
+					}else {
+						TOrderInfo uptOrderInfo = orderInfos.get(0);
+						uptOrderInfo.setLogisticsNo(orderLstcsList.get(i).getLogisticsFirm()+":"+orderLstcsList.get(i).getLogisticsNo());
+						updateOrderInfo(uptOrderInfo, false);
+						successSize = successSize +1;
+					}
+
+			}catch (Exception e){
+				failSize = failSize+1;
+				BathInsertResultVO.FailInfoVo failInfoVo = new BathInsertResultVO.FailInfoVo();
+					LOGGER.error("更新失败{}", JSON.toJSONString(e));
+					failInfoVo.setFailMsg("数据库操作失败");
+				failInfoVo.setOrderNo(orderLstcsList.get(i).getOrderNo());
 				failInfoVoList.add(failInfoVo);
 			}
 		}
@@ -201,6 +341,11 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	};
 
 	private  TOrderInfo setOrderInfoXSSFRow(XSSFRow row){
+		for(int i=0;i<18;i++){
+			if(row.getCell(i) == null){
+				row.createCell(i).setCellValue(new XSSFRichTextString(""));
+			}
+		}
 		row.getCell(0).setCellType(CellType.STRING);
 		String orderNo = row.getCell(0).getStringCellValue();
 		row.getCell(1).setCellType(CellType.STRING);
@@ -376,12 +521,64 @@ public class OrderInfoServiceImpl implements IOrderInfoService {
 	}
 
 	// 修改
-	public Integer updateOrderInfo(TOrderInfo t) throws Exception {
+	public Integer updateOrderInfo(TOrderInfo t, boolean isUptRegion) throws Exception {
+		if (isUptRegion){
+			try {
+				//解析地址
+				AddressInfo addressInfo = AddressResolutionUtil.getAddressComponent(t.getAddress());
+				TMdseRegion mdseRegion = new TMdseRegion();
+				mdseRegion.setMdseNo(t.getMdseNo());
+				mdseRegion.setCity(addressInfo.getCity());
+				List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(mdseRegion);
+				if(mdseRegions !=null && mdseRegions.size()>0){
+					mdseRegion = mdseRegions.get(0);
+					if (!mdseRegion.getArea().contains(addressInfo.getDistrict())){
+						mdseRegion.setArea(mdseRegion.getArea()+addressInfo.getDistrict()+"|");
+					}
+					mdseRegion.setNumber(mdseRegion.getNumber()+Long.valueOf(t.getOrderQuantity()));
+					mdseRegionService.updateMdseRegion(mdseRegion);
+				}else {
+					mdseRegion = new TMdseRegion();
+					mdseRegion.setMdseNo(t.getMdseNo());
+					TMdseInfo mdseInfo = mdseInfoService.findMdseInfoByMdseNo(t.getMdseNo());
+					mdseRegion.setMdseCat(mdseInfo.getMdseCat());
+					//解析地址
+					mdseRegion.setProvince(AddressResolutionUtil.proinceZh(addressInfo.getProvince()));
+					mdseRegion.setCity(addressInfo.getCity());
+					mdseRegion.setArea(addressInfo.getDistrict()+"|");
+
+					mdseRegion.setNumber(Long.valueOf(t.getOrderQuantity()));
+					mdseRegionService.addMdseRegion(mdseRegion);
+				}
+			}catch (Exception e){
+				LOGGER.error("销售地区写入数据库异常,异常信息:[{}]", e);
+			}
+
+		}
+
 		return orderInfoMapper.updateByPrimaryKeySelective(t);
 	};
 
 	// 删除
 	public Integer deleteOrderInfo(Long id) throws Exception {
+		try {
+			//删除销售信息;
+			TOrderInfo orderInfo = findOrderInfoById(id);
+			AddressInfo addressInfo = AddressResolutionUtil.getAddressComponent(orderInfo.getAddress());
+			//查询
+			TMdseRegion tMdseRegion = new TMdseRegion();
+			tMdseRegion.setProvince(AddressResolutionUtil.proinceZh(addressInfo.getProvince()));
+			tMdseRegion.setCity(addressInfo.getCity());
+			tMdseRegion.setMdseNo(orderInfo.getMdseNo());
+			List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(tMdseRegion);
+			if (mdseRegions !=null && mdseRegions.size() == 1){
+				mdseRegions.get(0).setNumber(mdseRegions.get(0).getNumber()-1);
+				mdseRegionService.updateMdseRegion(mdseRegions.get(0));
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
 		return orderInfoMapper.deleteByPrimaryKey(id);
 	}
 

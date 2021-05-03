@@ -1,10 +1,17 @@
 package com.test;
 
+import com.entity.po.mdse.TMdseInfo;
+import com.entity.po.mdse.TMdseRegion;
 import com.entity.po.order.TOrderInfo;
+import com.entity.vo.AddressInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.github.pagehelper.PageInfo;
+import com.service.mdse.IMdseInfoService;
+import com.service.mdse.IMdseRegionService;
 import com.service.order.IOrderInfoService;
 import com.test.init.BaseTest;
 import com.test.init.TestMenuTree;
+import com.util.AddressResolutionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +20,16 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class OrderTest extends BaseTest {
     Logger logger = LoggerFactory.getLogger(TestMenuTree.class);
     @Autowired
     private IOrderInfoService orderInfoService;
+    @Autowired
+    IMdseRegionService mdseRegionService;
+    @Autowired
+    IMdseInfoService mdseInfoService;
     @Test
     public void queryList(){
         List<TOrderInfo> list= null;
@@ -59,6 +71,55 @@ public class OrderTest extends BaseTest {
         try {
             int c = orderInfoService.addOrderInfo(t);
             System.out.println(c);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 更新地区
+     */
+    @Test
+    public void test(){
+        try {
+         List<TOrderInfo> orderInfos = orderInfoService.findOrderInfo(new TOrderInfo());
+            for (TOrderInfo t: orderInfos) {
+                try {
+                    //解析地址
+                    AddressInfo addressInfo = AddressResolutionUtil.getAddressComponent(t.getAddress());
+                    TMdseRegion mdseRegion = new TMdseRegion();
+                    mdseRegion.setMdseNo(t.getMdseNo());
+                    mdseRegion.setCity(addressInfo.getCity());
+                    List<TMdseRegion> mdseRegions = mdseRegionService.findMdseRegion(mdseRegion);
+                    if(mdseRegions !=null && mdseRegions.size()>0){
+                        mdseRegion = mdseRegions.get(0);
+                        if (!mdseRegion.getArea().contains(addressInfo.getDistrict())){
+                            mdseRegion.setArea(mdseRegion.getArea()+addressInfo.getDistrict()+"|");
+                        }
+                        mdseRegion.setNumber(mdseRegion.getNumber()+Long.valueOf(t.getOrderQuantity()));
+                        mdseRegionService.updateMdseRegion(mdseRegion);
+                    }else {
+                        mdseRegion = new TMdseRegion();
+                        mdseRegion.setMdseNo(t.getMdseNo());
+                        TMdseInfo mdseInfo = mdseInfoService.findMdseInfoByMdseNo(t.getMdseNo());
+                        mdseRegion.setMdseCat(mdseInfo.getMdseCat());
+                        //解析地址
+                        mdseRegion.setProvince(AddressResolutionUtil.proinceZh(addressInfo.getProvince()));
+                        mdseRegion.setCity(addressInfo.getCity());
+                        mdseRegion.setArea(addressInfo.getDistrict()+"|");
+
+                        mdseRegion.setNumber(Long.valueOf(t.getOrderQuantity()));
+                        mdseRegionService.addMdseRegion(mdseRegion);
+                    }
+                }catch (Exception e){
+                    TOrderInfo s = t;
+                    System.out.println("失败"+t);
+                    List<Map<String,String>> lists = AddressResolutionUtil.addressResolution(s.getAddress());
+                    System.out.println(s);
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

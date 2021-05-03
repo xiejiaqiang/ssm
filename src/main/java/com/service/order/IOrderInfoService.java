@@ -19,16 +19,19 @@ public interface IOrderInfoService {
 	public int countOrderInfo(TOrderInfo t) throws Exception;
 
 	// 通过ID查询
-	public TOrderInfo findOrderInfoById(Integer id) throws Exception;
+	public TOrderInfo findOrderInfoById(Long id) throws Exception;
 
 	// 新增
 	public Integer addOrderInfo(TOrderInfo t) throws Exception;
 
 	// 批量新增
-	public BathInsertResultVO bathAddOrderInfo(MultipartFile file) throws Exception;
+	public BathInsertResultVO bathAddOrderInfo(MultipartFile file,String orderType) throws Exception;
+
+	// 批量更新物流号
+	public BathInsertResultVO bathUptLstcs(MultipartFile file) throws Exception;
 
 	// 修改
-	public Integer updateOrderInfo(TOrderInfo t) throws Exception;
+	public Integer updateOrderInfo(TOrderInfo t, boolean isUptRegion) throws Exception;
 
 	// 删除
 	public Integer deleteOrderInfo(Long id) throws Exception;

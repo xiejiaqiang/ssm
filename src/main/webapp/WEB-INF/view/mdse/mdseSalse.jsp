@@ -97,6 +97,12 @@
 							</tr>
 
 							<tr>
+								<td>在售价：</td>
+								<td><input type="number" id="inPrice" max="999999999" name="inPrice"
+										   class="form-control"/></td>
+							</tr>
+
+							<tr>
 								<td>日常售价：</td>
 								<td><input type="number" id="dailyPrice" max="999999999" name="dailyPrice"
 										   class="form-control"/></td>
@@ -144,7 +150,7 @@
 							</tr>
 							<tr>
 								<td>商品链接：</td>
-								<td><input type="text" id="mdseUrl"   name="mdseUrl" class="form-control"/></td>
+								<td><input type="text" id="mdseUrl"   name="mdseUrl" class="form-control" aria-required="true" required/></td>
 							</tr>
 						</table>
 

@@ -29,7 +29,12 @@ public class CopyUtils {
         if(fromObj == null || toObj == null){
             return;
         }
-        BeanUtils.copyBean(fromObj,toObj);
+        try {
+            BeanUtils.copyBean(fromObj,toObj);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**

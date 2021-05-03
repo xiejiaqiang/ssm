@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,6 +76,9 @@ public class MdseSalesServiceImpl implements IMdseSalesService {
             }
 
         }
+        if(StringUtil.isNotEmpty(t.getMdseUrl())){
+            criteria.andMdseurlLike("%"+t.getMdseUrl()+"%");
+        }
         if(StringUtil.isNotEmpty(t.getSalesChannel())){
             criteria.andSaleschannelEqualTo(t.getSalesChannel());
         }
@@ -91,5 +95,17 @@ public class MdseSalesServiceImpl implements IMdseSalesService {
         List<TMdseSales> list = mdseSalesMapper.selectMdseSalesAndMdseInfo(example);
         PageInfo<TMdseSales> pageSales = new PageInfo<TMdseSales>(list);
         return pageSales;
+    }
+
+    @Override
+    public List<TMdseSales> findMdseSalesByMdseUrl(String url) throws Exception {
+        if (StringUtil.isEmpty(url)){
+            return new ArrayList<TMdseSales>();
+        }
+        TMdseSalesExample example = new TMdseSalesExample();
+        TMdseSalesExample.Criteria criteria = example.createCriteria();
+        criteria.andMdseurlLike("%"+url+"%");
+        List<TMdseSales> list = mdseSalesMapper.selectMdseSalesAndMdseInfo(example);
+        return list;
     }
 }

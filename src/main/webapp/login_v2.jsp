@@ -20,13 +20,13 @@
 
 </head>
 
-<body class="gray-bg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;"   background="${path }/resources/img/win1002.jpg">
+<body class="gray-bg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;"   background="${path }/resources/img/千库网_矢量渐变科技线条网格背景_背景编号5961944.jpg">
 
 <div class="middle-box text-center loginscreen  animated fadeInDown">
     <div>
         <div>
 
-            <h1 class="logo-name">佳</h1>
+            <h1 class="logo-name" style="color:#ffffff">佳</h1>
 
         </div>
         <h3>欢迎登录佳一后台管理系统</h3>

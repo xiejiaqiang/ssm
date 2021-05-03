@@ -1,5 +1,16 @@
 package com.util;
 
+import com.entity.vo.AddressInfo;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddressResolutionUtil {
-
+    private static final String AK = "7311851b50036c931318dd8eb3a09d1f";
     /**
      * 解析地址
      * @author lin
@@ -36,6 +47,103 @@ public class AddressResolutionUtil {
             table.add(row);
         }
         return table;
+    }
+
+    //根据地址获取到经纬度
+    public static String getGeocoderLatitude(String address) {
+        BufferedReader in = null;
+        String lng = "";
+        String lat = "";
+        try {
+            address = URLEncoder.encode(address, "UTF-8");
+            URL tirc = new URL("http://api.map.baidu.com/geocoder/v2/?address="
+                    + address
+                    + "&output=json&ak="+AK+"");
+            in = new BufferedReader(new InputStreamReader(tirc.openStream(),
+                    "UTF-8"));
+            String res;
+            StringBuilder sb = new StringBuilder("");
+            while ((res = in.readLine()) != null) {
+                sb.append(res.trim());
+            }
+            String str = sb.toString();
+            if (StringUtil.isNotEmpty(str)) {
+                int lngStart = str.indexOf("lng\":");
+                int lngEnd = str.indexOf(",\"lat");
+                int latEnd = str.indexOf("},\"precise");
+                if (lngStart > 0 && lngEnd > 0 && latEnd > 0) {
+                    lng = str.substring(lngStart + 5, lngEnd);
+                    lat = str.substring(lngEnd + 7, latEnd);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return lat + "," + lng;
+    }
+
+    /**
+     * 根据经纬度获取省市区
+     * @param LatitudeAndLongitude
+     * @return
+     * @throws MalformedURLException
+     */
+    public static JsonNode getposition(String LatitudeAndLongitude)
+            throws MalformedURLException {
+        BufferedReader in = null;
+        JsonNode locationNode = null;
+        URL tirc = new URL("http://api.map.baidu.com/geocoder/v2/?location="
+                + LatitudeAndLongitude + "&output=json&ak="
+                + AK);
+        try {
+            in = new BufferedReader(new InputStreamReader(tirc.openStream(),
+                    "UTF-8"));
+            String res;
+            StringBuilder sb = new StringBuilder("");
+            while ((res = in.readLine()) != null) {
+                sb.append(res.trim());
+            }
+            String str = sb.toString();
+            ObjectMapper mapper = new ObjectMapper();
+            if (StringUtil.isNotEmpty(str)) {
+                JsonNode jsonNode = mapper.readTree(str);
+                jsonNode.findValue("status").toString();
+                JsonNode resultNode = jsonNode.findValue("result");
+                locationNode = resultNode
+                        .findValue("addressComponent");
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return locationNode;
+
+    }
+    public static AddressInfo getAddressComponent(String addr) throws MalformedURLException{
+        AddressInfo info = new AddressInfo();
+        JsonNode json = getposition(getGeocoderLatitude(addr));
+        info.setAdcode(json.get("adcode").asText());
+        info.setCity(json.get("city").asText());
+        info.setCountry(json.get("country").asText());
+        info.setCountryLevel(json.get("city_level").asText());
+        info.setDistrict(json.get("district").asText());
+        info.setProvince(json.get("province").asText());
+        return info;
+    }
+    public static void main(String[] args) {
+        try {
+            System.out.println(getposition(getGeocoderLatitude("待更新")));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     //地址转换

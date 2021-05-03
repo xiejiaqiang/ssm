@@ -41,7 +41,7 @@
 					<li class="nav-header">
 						<div class="dropdown profile-element">
 							<span><img alt="image" class="img-circle"
-								src="${path }/resources/img/profile_small.jpg" /></span> <a
+								src="${path }/resources/img/toux.jpg" /></span> <a
 								data-toggle="dropdown" class="dropdown-toggle" href="#"> <span
 								class="clear"> <span class="block m-t-xs"><strong
 										class="font-bold">${currentUser.username }</strong></span> <span

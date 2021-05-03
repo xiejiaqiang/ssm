@@ -92,9 +92,43 @@
 						<h4 class="modal-title" id="myModalLabel">请选择Excel文件</h4>
 					</div>
 					<div class="modal-body">
-						<a href="${path }/resources/xls/支付订单导入模板.xlsx" class="form-control" style="border:none;">下载导入模板</a>
+						<label class="control-label">请选择订单渠道：</label>
+							<label class="radio-inline">
+								<input type="radio" value="1" id="sale_order_tm" name="sale_order_type">天猫</label>
+							<label class="radio-inline">
+								<input type="radio" value="2" checked="" id="sale_order_jd" name="sale_order_type">京东</label>
+						    <label class="radio-inline">
+							<input type="radio" value="3" id="sale_order_tb" name="sale_order_type">淘宝</label>
+						<label class="radio-inline">
+							<input type="radio" value="4" id="sale_order_pdd" name="sale_order_type">拼多多</label>
+						    <label class="radio-inline">
+							<input type="radio" value="0" id="sale_order_zdy" name="sale_order_type">自定义</label>
+						<label class="radio-inline">
+							<a href="${path }/resources/xls/支付订单导入模板.xlsx" class="form-control" style="border:none;">下载自定义导入模板</a></label>
+
 						<input type="file" name="txt_file" id="txt_file" class="file-loading" /><!-- multiple表示允许同时上传多个文件 -->
-					</div></div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<!-- 单号上传 -->
+	<form>
+		<div class="modal fade" id="modal_btn_import_lstcs" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="modal_btn_import_lstcs">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<h4 class="modal-title" id="myModalLabel">请选择Excel文件</h4>
+					</div>
+					<div class="modal-body">
+							<a href="${path }/resources/xls/物流单号导入模板.csv" class="form-control" style="border:none;">下载物流单号导入模板</a>
+
+						<input type="file" name="txt_file_lstcs" id="txt_file_lstcs" class="file-loading" /><!-- multiple表示允许同时上传多个文件 -->
+
+					</div>
+				</div>
 			</div>
 		</div>
 	</form>

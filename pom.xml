@@ -79,6 +79,12 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
+		<!-- csv文件解析依赖 -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.3.2</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>

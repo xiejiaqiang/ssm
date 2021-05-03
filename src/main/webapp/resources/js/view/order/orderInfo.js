@@ -3,6 +3,7 @@ $(function () {
     reserveOrderInfoURL = 'reserveOrderInfo.htm' ;//修改
     deleteOrderInfoURL = 'deleteOrderInfo.htm' ;//删除
     batchImportURL = 'batchImport.htm' ;//批量导入
+    batchImportLstcsURL = 'batchImportLstcs.htm' ;//单号批量导入
     exportURL = 'export.htm' ;//导出
     findMdseNoURL = 'findMdseNo.htm' ;//
     init();
@@ -60,6 +61,9 @@ var init = function () {
     //初始化fileinput
     var oFileInput = new FileInput();
     oFileInput.Init("txt_file", batchImportURL);
+    //初始化导入fileinput
+    var oFileInputLstcs = new FileInputLstcs();
+    oFileInputLstcs.Init("txt_file_lstcs", batchImportLstcsURL);
 };
 
 var TableInit = function () {
@@ -75,7 +79,7 @@ var TableInit = function () {
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
             sortable: true,                     //是否启用排序
-            sortName: "id",
+            sortName: "orderDate",
             sortOrder: "desc",                   //排序方式
             queryParams: oTableInit.queryParams,//传递参数（*）
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
@@ -99,6 +103,8 @@ var TableInit = function () {
                 {
                     field: 'id',
                     title: 'ID',
+                    hidden : true,
+                    visible: false,
                     sortable:true
                 },
                 {
@@ -114,6 +120,8 @@ var TableInit = function () {
                 {
                     field: 'mdseName',
                     title: '商品名称',
+                    hidden : true,
+                    visible: false,
                     sortable:false
                 },
                 {
@@ -142,18 +150,18 @@ var TableInit = function () {
                     sortable:true
                 },
                 {
-                    field: 'discountType',
-                    title: '优惠分类',
+                    field: 'orderChannel',
+                    title: '订单渠道',
                     sortable:true,
                     formatter:function(value,row,index){
                         if(value == '1'){
-                            return '店铺券';
+                            return '天猫';
                         }else if(value == '2'){
-                            return '平台券';
+                            return '京东';
                         }else if(value == '3'){
-                            return '满减';
+                            return '淘宝';
                         }else if(value == '4'){
-                            return '客服优惠';
+                            return '拼多多';
                         }
                         return value;
                     }
@@ -182,6 +190,29 @@ var TableInit = function () {
                 {
                     field: 'logisticsNo',
                     title: '物流单号',
+                    sortable:true
+                },
+                {
+                    field: 'orderDate',
+                    title: '订单日期',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return changeDateFormat8(value);
+                    }
+                },
+                {
+                    field: 'orderQuantity',
+                    title: '订单数量',
+                    sortable:true
+                },
+                {
+                    field: 'purchasePrice',
+                    title: '进货价格',
+                    sortable:true
+                },
+                {
+                    field: 'purchaseSource',
+                    title: '进货来源',
                     sortable:true
                 },
                 {
@@ -214,41 +245,18 @@ var TableInit = function () {
                     }
                 },
                 {
-                    field: 'orderDate',
-                    title: '订单日期',
-                    sortable:true,
-                    formatter:function(value,row,index){
-                        return changeDateFormat8(value);
-                    }
-                },
-                {
-                    field: 'orderQuantity',
-                    title: '订单数量',
-                    sortable:true
-                },
-                {
-                    field: 'purchasePrice',
-                    title: '进货价格',
-                    sortable:true
-                },
-                {
-                    field: 'purchaseSource',
-                    title: '进货来源',
-                    sortable:true
-                },
-                {
-                    field: 'orderChannel',
-                    title: '订单渠道',
+                    field: 'discountType',
+                    title: '优惠分类',
                     sortable:true,
                     formatter:function(value,row,index){
                         if(value == '1'){
-                            return '天猫';
+                            return '店铺券';
                         }else if(value == '2'){
-                            return '京东';
+                            return '平台券';
                         }else if(value == '3'){
-                            return '淘宝';
+                            return '满减';
                         }else if(value == '4'){
-                            return '拼多多';
+                            return '客服优惠';
                         }
                         return value;
                     }
@@ -292,7 +300,7 @@ var FileInput = function () {
         control.fileinput({
             language: 'zh', //设置语言
             uploadUrl: uploadUrl, //上传的地址
-            allowedFileExtensions: ['xls', 'xlsx'],//接收的文件后缀
+            allowedFileExtensions: ['xls', 'xlsx', 'CSV'],//接收的文件后缀
             showUpload: true, //是否显示上传按钮
             showCaption: false,//是否显示标题
             browseClass: "btn btn-primary", //按钮样式
@@ -308,6 +316,13 @@ var FileInput = function () {
             validateInitialCount:true,
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
             msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+            uploadExtraData : function() {  //传递参数
+                var orderType = $('input[name="sale_order_type"]:checked').val()
+                var data = {
+                    type : orderType
+                };
+                return data;
+            }
         });
 
         //导入文件上传完成之后的事件
@@ -329,7 +344,7 @@ var FileInput = function () {
                     });
                 }else{
                     swal({
-                        title: "文件导入成功",
+                        title: "文件部分导入成功",
                         text: data.response.msg,
                         type: "success",
                         showCancelButton: true,
@@ -356,6 +371,96 @@ var FileInput = function () {
                             // 对下载的文件命名
                             link.download =  "失败数据列表.csv";
                             link.click();
+                    });
+
+                }
+                $("#btn_search").click();
+            }
+
+            //1.初始化表格
+            var oTable = new TableInit();
+            oTable.Init(data);
+            $("#div_startimport").show();
+        });
+    }
+    return oFile;
+};
+//初始化物流单号导入fileinput
+var FileInputLstcs = function () {
+    var oFile = new Object();
+
+    //初始化fileinput控件（第一次初始化）
+    oFile.Init = function(ctrlName, uploadUrl) {
+        var control = $('#' + ctrlName);
+
+        //初始化上传控件的样式
+        control.fileinput({
+            language: 'zh', //设置语言
+            uploadUrl: uploadUrl, //上传的地址
+            allowedFileExtensions: ['CSV'],//接收的文件后缀
+            showUpload: true, //是否显示上传按钮
+            showCaption: false,//是否显示标题
+            browseClass: "btn btn-primary", //按钮样式
+            //dropZoneEnabled: false,//是否显示拖拽区域
+            //minImageWidth: 50, //图片的最小宽度
+            //minImageHeight: 50,//图片的最小高度
+            //maxImageWidth: 1000,//图片的最大宽度
+            //maxImageHeight: 1000,//图片的最大高度
+            //maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
+            //minFileCount: 0,
+            maxFileCount: 10, //表示允许同时上传的最大文件个数
+            enctype: 'multipart/form-data',
+            validateInitialCount:true,
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+        });
+
+        //导入文件上传完成之后的事件
+        $("#txt_file_lstcs").on("fileuploaded", function (event, data, previewId, index) {
+            $(".fileinput-remove-button").click()
+            $("#modal_btn_import_lstcs").modal("hide");
+            var success = data.response.success;
+            var dataInfo = data.response.data;
+            var errorMsg= data.response.errorMsg;
+            if (success == false) {
+                layerAlert(errorMsg, 2)
+                return;
+            }else{
+                if(dataInfo == undefined ||dataInfo[0] == undefined){
+                    swal({
+                        title: "导入成功",
+                        text: "文件已全部导入成功",
+                        type: "success"
+                    });
+                }else{
+                    swal({
+                        title: "文件部分导入成功",
+                        text: data.response.msg,
+                        type: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: "#466cdd",
+                        confirmButtonText: "导出失败数据",
+                        closeOnConfirm: false
+                    }, function () {
+                        // 要导出的json数据
+                        const jsonData = dataInfo;
+                        // 列标题，逗号隔开，每一个逗号就是隔开一个单元格
+                        let str = `失败原因,订单编号\n`;
+                        // 增加\t为了不让表格显示科学计数法或者其他格式
+                        for(let i = 0 ; i < jsonData.length ; i++ ){
+                            for(const key in jsonData[i]){
+                                str+=`${jsonData[i][key] + '\t'},`;
+                            }
+                            str+='\n';
+                        }
+                        // encodeURIComponent解决中文乱码
+                        const uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+                        // 通过创建a标签实现
+                        const link = document.createElement("a");
+                        link.href = uri;
+                        // 对下载的文件命名
+                        link.download =  "失败数据列表.csv";
+                        link.click();
                     });
 
                 }
@@ -438,6 +543,11 @@ var ButtonInit = function () {
             var getSelections = $('#table_payOrder').bootstrapTable('getSelections');
             $('#modal_btn_import').modal({backdrop: 'static', keyboard: false});
             $('#modal_btn_import').modal('show');
+
+        });
+        $("#btn_import_lstcs").click(function(){
+            $('#modal_btn_import_lstcs').modal({backdrop: 'static', keyboard: false});
+            $('#modal_btn_import_lstcs').modal('show');
 
         });
         document.onkeydown = function (e) { // 回车提交表单

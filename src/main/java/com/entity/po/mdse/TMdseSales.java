@@ -42,6 +42,12 @@ public class TMdseSales implements Serializable {
     private BigDecimal dailyPrice;
 
     /**
+     * 在售价
+     */
+    @Column(name = "inPrice")
+    private BigDecimal inPrice;
+
+    /**
      * 活动价
      */
     @Column(name = "activityPrice")
@@ -178,6 +184,14 @@ public class TMdseSales implements Serializable {
 
     public String getSalesStatus() {
         return salesStatus;
+    }
+
+    public void setInPrice(BigDecimal inPrice) {
+        this.inPrice = inPrice;
+    }
+
+    public BigDecimal getInPrice() {
+        return inPrice;
     }
 
     private static final long serialVersionUID = 1L;

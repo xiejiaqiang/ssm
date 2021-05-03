@@ -124,6 +124,11 @@ var TableInit = function () {
                     }
                 },
                 {
+                    field: 'inPrice',
+                    title: '在售价',
+                    sortable:false
+                },
+                {
                     field: 'dailyPrice',
                     title: '日常售价',
                     sortable:false
@@ -281,6 +286,7 @@ function viewMdseSalseUrl(value){
         $('#platformId').val(getSelection.platformId);
         $('#mdseNo').val(getSelection.mdseNo);
         $('#salesChannel').val(getSelection.salesChannel);
+        $('#inPrice').val(getSelection.inPrice);
         $('#dailyPrice').val(getSelection.dailyPrice);
         $('#activityPrice').val(getSelection.activityPrice);
         $('#promotionPrice').val(getSelection.promotionPrice);

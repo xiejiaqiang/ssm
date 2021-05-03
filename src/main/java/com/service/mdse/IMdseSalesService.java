@@ -32,4 +32,6 @@ public interface IMdseSalesService {
 
 	public PageInfo<TMdseSales> findMdseSales(TMdseSales t, int pageNum, int pageSize, String ordername, String order) throws Exception;
 
+	public List<TMdseSales> findMdseSalesByMdseUrl(String url) throws Exception;
+
 }

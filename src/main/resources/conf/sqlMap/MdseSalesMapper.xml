@@ -11,6 +11,7 @@
     <result column="platformId" jdbcType="VARCHAR" property="platformId" />
     <result column="mdseNo" jdbcType="VARCHAR" property="mdseNo" />
     <result column="salesChannel" jdbcType="CHAR" property="salesChannel" />
+    <result column="inPrice" jdbcType="DECIMAL" property="inPrice" />
     <result column="dailyPrice" jdbcType="DECIMAL" property="dailyPrice" />
     <result column="activityPrice" jdbcType="DECIMAL" property="activityPrice" />
     <result column="promotionPrice" jdbcType="DECIMAL" property="promotionPrice" />
@@ -43,7 +44,7 @@
   </select>
 
     <sql id="Mdse_Sales_Column_List">
-        s.id, s.platformId, s.mdseNo, s.salesChannel, s.dailyPrice, s.activityPrice, s.promotionPrice, s.preferentialAmount,
+        s.id, s.platformId, s.mdseNo, s.salesChannel, s.dailyPrice, s.inPrice, s.activityPrice, s.promotionPrice, s.preferentialAmount,
     s.preferentialType, s.salesSku,s.salesStatus, s.mdseUrl
   </sql>
 

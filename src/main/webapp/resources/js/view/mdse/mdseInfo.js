@@ -152,7 +152,9 @@ var TableInit = function () {
                 {
                     field: 'mdseNo',
                     title: '商品编号',
-                    sortable:true
+                    hidden : true,
+                    sortable:true,
+                    visible: false
                 },
                 {
                     field: 'mdseName',
@@ -175,6 +177,22 @@ var TableInit = function () {
                     sortable:true
                 },
                 {
+                    field: 'sellingPoint',
+                    title: '卖点&#12288&#12288&#12288&#12288&#12288&#12288',
+                    sortable:true
+                },
+                {
+                    title: '价格',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return '<a href="javascript:viewMdsePrice()">查看</a>';
+                    }
+                }, {
+                    field: 'retailPrice',
+                    title: '零售指导价',
+                    sortable:false
+                },
+                {
                     field: 'mdseCat',
                     title: '商品分类',
                     sortable:true,
@@ -195,6 +213,24 @@ var TableInit = function () {
                     sortable:true
                 },
                 {
+                    field: 'brand',
+                    title: '品牌',
+                    sortable:true
+                },
+                {
+                    field: 'series',
+                    title: '系列',
+                    sortable:true
+                },
+                {
+                    field: 'pictureId',
+                    title: '图片管理',
+                    sortable:true,
+                    formatter:function(value,row,index){
+                        return '<a href="javascript:viewMdseImg('+row.id+')">查看</a>';
+                    }
+                },
+                {
                     field: 'mdseStatus',
                     title: '商品状态',
                     sortable:true,
@@ -207,36 +243,6 @@ var TableInit = function () {
                             return '已下市';
                         }
                         return value;
-                    }
-                },
-                {
-                    field: 'brand',
-                    title: '品牌',
-                    sortable:true
-                },
-                {
-                    field: 'series',
-                    title: '系列',
-                    sortable:true
-                },
-                {
-                    field: 'sellingPoint',
-                    title: '卖点&#12288&#12288&#12288&#12288&#12288&#12288',
-                    sortable:true
-                },
-                {
-                    title: '价格',
-                    sortable:true,
-                    formatter:function(value,row,index){
-                        return '<a href="javascript:viewMdsePrice()">查看</a>';
-                    }
-                },
-                {
-                    field: 'pictureId',
-                    title: '图片管理',
-                    sortable:true,
-                    formatter:function(value,row,index){
-                        return '<a href="javascript:viewMdseImg('+row.id+')">查看</a>';
                     }
                 },
                 {
@@ -260,10 +266,6 @@ var TableInit = function () {
                     title: '更新时间',
                     sortable:true,
                     visible: false
-                }, {
-                    field: 'retailPrice',
-                    title: '零售指导价',
-                    sortable:false
                 }, {
                     field: 'buyingPrice',
                     title: '进货价',
